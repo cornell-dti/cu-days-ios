@@ -1,6 +1,6 @@
 //
 //  Event.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu on 2017/3/29.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.
@@ -82,7 +82,7 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 	/**
 		Creates an event from saved `CoreData`.
 		
-		- important: Should have value fields synced with `O-week.xcdatamodeld` and function `saveToCoreData`.
+		- important: Should have value fields synced with `CU-Days.xcdatamodeld` and function `saveToCoreData`.
 		
 		- parameter obj: Object retrieved from `CoreData`. Expects fields:
 				title  => String
@@ -182,7 +182,7 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 	/**
 		Sets this event to the `CoreData` context given; for saving events.
 		
-		- important: Should have value fields synced with `O-week.xcdatamodeld` and function `init(obj)`.
+		- important: Should have value fields synced with `CU-Days.xcdatamodeld` and function `init(obj)`.
 		
 		- parameters:
 			- entity: Core data magic.

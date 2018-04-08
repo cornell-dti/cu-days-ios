@@ -1,6 +1,6 @@
 //
 //  DatePickerController.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu and Vicente Caycedo on 5/5/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.

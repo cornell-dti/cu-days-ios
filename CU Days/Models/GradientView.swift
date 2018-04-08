@@ -1,6 +1,6 @@
 //
 //  GradientView.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu on 2017/11/24.
 //  Copyright © 2017年 Cornell SA Tech. All rights reserved.

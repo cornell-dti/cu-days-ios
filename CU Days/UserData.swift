@@ -1,6 +1,6 @@
 //
 //  UserData.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by Vicente Caycedo on 4/28/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.
@@ -13,9 +13,9 @@ import UIKit
 /**
 	Handles all data shared between classes. Many of these variables have associated `NotificationCenter` events that should be fired when they are changed, so do so when changing their values.
 
-	`allEvents`: All events on disk, sorted by date.
-	`selectedEvents`: All events selected by the user, sorted by date.
-	`categories`: All categories on disk.
+	`allEvents`: All events on disk with PKs as keys.
+	`selectedEvents`: All events selected by the user with PKs as keys.
+	`categories`: All categories on disk with PKs as keys.
 	`DATES`: Dates of the orientation. Determined from `YEAR`, `MONTH`, `START_DAY`,
 	and `END_DAY`.
 	`selectedDate`: The date to display events for.
@@ -29,8 +29,8 @@ class UserData
 	static let collegeTypeName = "college" //KeyPath used for accessing the college of the user. See `Colleges` and `collegePk`.
     
     //Events
-    static var allEvents = [Date: [Event]]()
-    static var selectedEvents = [Date: [Event]]()
+	static var allEvents = [Date: [Int:Event]]()
+	static var selectedEvents = [Date: [Int:Event]]()
     
     //Calendar for manipulating dates. You can use this throughout the app.
     static let userCalendar = Calendar.current
@@ -44,7 +44,7 @@ class UserData
 	static let END_DAY = 23		//Note: END_DAY must > START_DAY
 	
 	//Categories
-	static var categories = [Category]()
+	static var categories = [Int:Category]()
 	
 	//User identity
 	static var studentTypePk:Int? = nil
@@ -70,8 +70,8 @@ class UserData
 		{
 			let date = UserData.userCalendar.date(from: dateComponents)!
 			DATES.append(date)
-			selectedEvents[date] = []
-			allEvents[date] = []
+			selectedEvents[date] = [Int:Event]()
+			allEvents[date] = [Int:Event]()
 			dateComponents.day! += 1
 			
 			if (UserData.userCalendar.compare(today, to: date, toGranularity: .day) == .orderedSame)
@@ -120,22 +120,21 @@ class UserData
 		
 		//load from CoreData
 		let eventData = fetchFromCoreData(Event.self)
-		eventData.map({Event($0)})
-			.filter({!allEventsContains($0)})
-			.forEach({appendToAllEvents($0)})
+		eventData.forEach({appendToAllEvents(Event($0))})
 		
 		let categoryData = fetchFromCoreData(Category.self)
-		categories = categoryData.map({Category($0)})
-			.filter({!categories.contains($0)})
+		categories = categoryData.reduce(into: [Int:Category](), {
+			map, data in
+			let category = Category(data)
+			map[category.pk] = category
+		})
 		
 		let addedPKs = getAddedPKs()
-		let selectedEventsArray = selectedEvents.values.flatMap({$0})
-		allEvents.values.flatMap({$0})
-			.filter({addedPKs.contains($0.pk)})
-			.filter({!selectedEventsArray.contains($0)})
-			.forEach({insertToSelectedEvents($0)})
-		
-		sortEventsAndCategories()
+		addedPKs.forEach({pk in
+			if let event = eventFor(pk) {
+				insertToSelectedEvents(event)
+			}
+		})
 		
 		//access database for updates
 		Internet.getUpdatesForVersion(version, onCompletion:
@@ -145,7 +144,7 @@ class UserData
 			//update categories
 			changedCategories.forEach({updateCategory($0)})
 			deletedCategoryPks.forEach({removeFromCoreData(entityName: Category.entityName, pk: $0)})
-			categories = categories.filter({!deletedCategoryPks.contains($0.pk)})
+			deletedCategoryPks.forEach({categories.removeValue(forKey: $0)})
 			
 			//update events
 			changedEvents.forEach({updateEvent($0)})
@@ -156,16 +155,18 @@ class UserData
 			})
 			for date in DATES
 			{
-				allEvents[date] = allEvents[date]!.filter({!deletedEventPks.contains($0.pk)})
-				selectedEvents[date] = selectedEvents[date]!.filter({!deletedEventPks.contains($0.pk)})
+				deletedEventPks.forEach({pk in
+					allEvents[date]?.removeValue(forKey: pk)
+					selectedEvents[date]?.removeValue(forKey: pk)
+				})
 			}
 			
 			//all version updates have been processed. Now, load events that the user has selected into selectedEvents (again).
-			let selectedEventsArray = selectedEvents.values.flatMap({$0})
-			allEvents.values.flatMap({$0})
-				.filter({addedPKs.contains($0.pk)})
-				.filter({!selectedEventsArray.contains($0)})
-				.forEach({insertToSelectedEvents($0)})
+			addedPKs.forEach({pk in
+				if let event = eventFor(pk) {
+					insertToSelectedEvents(event)
+				}
+			})
 			
 			//delete and resend notifications
 			let changedSelectedEvents = changedEvents.filter({addedPKs.contains($0.pk)})
@@ -178,23 +179,9 @@ class UserData
 			//notify user of event updates
 			LocalNotifications.addNotification(for: changedSelectedEvents)
 			
-			//sort again after updates
-			sortEventsAndCategories()
-			
 			//save updated database version
 			version = newVersion
 		})
-	}
-	/**
-		Sorts `allEvents` and `categories`.
-	*/
-	private static func sortEventsAndCategories()
-	{
-		for (date, events) in allEvents
-		{
-			allEvents[date] = events.sorted()
-		}
-		categories = categories.sorted()
 	}
 	
 	/**
@@ -240,7 +227,7 @@ class UserData
     static func allEventsContains(_ event: Event) -> Bool
 	{
         if let eventsForDate = allEvents[event.date] {
-            return eventsForDate.contains(event)
+            return eventsForDate[event.pk] != nil
         } else {
             return false
         }
@@ -253,7 +240,7 @@ class UserData
     static func selectedEventsContains(_ event: Event) -> Bool
 	{
         if let setForDate = selectedEvents[event.date] {
-            return setForDate.contains(event)
+            return setForDate[event.pk] != nil
         } else {
             return false
         }
@@ -269,7 +256,7 @@ class UserData
 			print("appendToAllEvents: attempted to add event with date outside orientation")
 			return
 		}
-		allEvents[event.date]!.append(event)
+		allEvents[event.date]![event.pk] = event
     }
 	/**
 		Adds event to `selectedEvents`. The date should match a date in `DATES`.
@@ -282,7 +269,7 @@ class UserData
 			print("insertToSelectedEvents: attempted to add event with date outside orientation")
 			return
 		}
-		selectedEvents[event.date]!.append(event)
+		selectedEvents[event.date]![event.pk] = event
     }
 	/**
 		Removes event from `selectedEvents`.
@@ -292,13 +279,9 @@ class UserData
 	@discardableResult
     static func removeFromSelectedEvents(_ event: Event) -> Bool
 	{
-        if let array = selectedEvents[event.date]
+        if selectedEvents[event.date] != nil
 		{
-            if let index = array.index(of: event)
-			{
-                selectedEvents[event.date]!.remove(at: index)
-				return true
-            }
+            return selectedEvents[event.date]!.removeValue(forKey: event.pk) != nil
         }
 		return false
     }
@@ -310,13 +293,9 @@ class UserData
 	@discardableResult
 	static func removeFromAllEvents(_ event:Event) -> Bool
 	{
-		if let array = allEvents[event.date]
+		if allEvents[event.date] != nil
 		{
-			if let index = array.index(of: event)
-			{
-				allEvents[event.date]!.remove(at: index)
-				return true
-			}
+			return allEvents[event.date]!.removeValue(forKey: event.pk) != nil
 		}
 		return false
 	}
@@ -327,32 +306,30 @@ class UserData
 	*/
 	static func eventFor(_ pk:Int) -> Event?
 	{
-		return allEvents.flatMap({$0.value}).first(where: {$0.pk == pk})
+		return allEvents.values.first(where: {$0[pk] != nil})?[pk]
 	}
 	/**
-		Linear search for a category given its pk value.
-		- parameter pk: `Category.pk`
-		- returns: Category, nil if no match was found.
+		Returns the list of sorted events for the given date.
+		- parameter date: Date of events
+		- returns: Event array, nil if the date was invalid
 	*/
-	static func categoryFor(_ pk:Int) -> Category?
+	static func sortedEvents(for date:Date) -> [Event]?
 	{
-		return categories.first(where: {$0.pk == pk})
+		return allEvents[date]?.values.sorted()
 	}
 	/**
 		Updates an event that might've been already on disk with one from the database. Performs the following actions:
 	
-		1. Removes old event from list (`removeFromAllEvents()` matches event by equality, which is based on `pk`, and since an updated event should have the same `pk` as the old event, calling `removeFromAllEvents(newEvent)` should remove the old event).
-		2. Adds new event.
-		3. Removes old event from `CoreData` (again, using the `pk`. Look at `removeFromCoreData()` for details).
-		4. Saves new event to `CoreData`.
-		5. Attempt to remove old event from selected events. If we did remove something, that means the old event was selected, so we should then select the new updated event. `removeFromSelected()` also matches event by equality, which is based on `pk`.
+		1. Adds new event.
+		2. Removes old event from `CoreData` (again, using the `pk`. Look at `removeFromCoreData()` for details).
+		3. Saves new event to `CoreData`.
+		4. Attempt to remove old event from selected events. If we did remove something, that means the old event was selected, so we should then select the new updated event. `removeFromSelected()` also matches event by equality, which is based on `pk`.
 	
 		- note: Pictures CANNOT be updated with this method (for now). To update an event's picture, the best way would be to delete the event and add a new one (both done on the database), with a different pk.
 		- parameter event: Updated event. Should have same `pk` as old event, if old event exists.
 	*/
 	static func updateEvent(_ event:Event)
 	{
-		removeFromAllEvents(event)
 		appendToAllEvents(event)
 		removeFromCoreData(entityName: Event.entityName, pk: event.pk)
 		saveToCoreData(event)
@@ -366,7 +343,7 @@ class UserData
 	/**
 		Updates a category that might've been already on disk with one from the database. Performs the following actions:
 	
-		1. Checks to see if there exists an old category to be replaced. If there is, then remove the old one from the list and from `CoreData`.
+		1. Remove the old category from `CoreData`.
 		2. Adds new category.
 		3. Saves new category to `CoreData`.
 		
@@ -374,12 +351,8 @@ class UserData
 	*/
 	static func updateCategory(_ category:Category)
 	{
-		if let indexToRemove = categories.index(of: category)
-		{
-			categories.remove(at: indexToRemove)
-			removeFromCoreData(entityName: Category.entityName, pk: category.pk)
-		}
-		categories.append(category)
+		removeFromCoreData(entityName: Category.entityName, pk: category.pk)
+		categories[category.pk] = category
 		saveToCoreData(category)
 	}
 	
@@ -493,7 +466,7 @@ class UserData
     static func saveAddedPKs()
 	{
         let defaults = UserDefaults.standard
-        let addedPks = selectedEvents.values.flatMap({$0}).map({$0.pk})
+        let addedPks = selectedEvents.values.flatMap({$0.keys})
         defaults.set(addedPks, forKey: addedPKsName)
     }
 	/**

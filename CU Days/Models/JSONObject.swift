@@ -1,6 +1,6 @@
 //
 //  JSONObject.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu on 2017/6/24.
 //  Copyright © 2017年 Cornell D&TI. All rights reserved.

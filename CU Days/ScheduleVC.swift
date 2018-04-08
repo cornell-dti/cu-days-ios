@@ -1,6 +1,6 @@
 //
 //  ScheduleVC.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by Vicente Caycedo on 3/18/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.
@@ -159,7 +159,7 @@ class ScheduleVC: UIViewController, DateContainer
     private func drawAllEvents()
 	{
         //consider events that start earliest first
-        let sortedEvents = UserData.selectedEvents[date]!.sorted(by: {$0.startTime < $1.startTime})
+        let sortedEvents = UserData.selectedEvents[date]!.values.sorted()
         guard !sortedEvents.isEmpty else {
             return
         }

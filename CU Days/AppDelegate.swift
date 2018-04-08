@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by Vicente Caycedo on 3/13/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.

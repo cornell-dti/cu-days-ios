@@ -1,6 +1,6 @@
 //
 //  FilterVC.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by Vicente Caycedo on 6/12/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.
@@ -56,7 +56,7 @@ class FilterVC: UITableViewController
 		})))
 		//put all the categories that aren't colleges in the last section
 		tableSections.append((name: "", rows: UserData.categories
-			.filter({Colleges.collegeForPk($0.pk) == nil}).map({
+			.values.filter({Colleges.collegeForPk($0.pk) == nil}).map({
 				category in
 				let cell = UITableViewCell.newAutoLayout()
 				cell.textLabel?.text = category.name

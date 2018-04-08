@@ -1,6 +1,6 @@
 //
 //  SearchVC.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu on 2017/11/25.
 //  Copyright © 2017年 Cornell SA Tech. All rights reserved.
@@ -112,7 +112,7 @@ class SearchVC: EmptyStateTableVC, UISearchResultsUpdating, UISearchControllerDe
 		}
 		
 		//looks at the title, caption, description, and additional info for matches
-		let filteredEvents = UserData.allEvents.values.flatMap({$0})
+		let filteredEvents = UserData.allEvents.values.flatMap({$0.values})
 			.filter({$0.title.localizedCaseInsensitiveContains(searchText) || $0.caption.localizedCaseInsensitiveContains(searchText) ||
 				$0.description.localizedCaseInsensitiveContains(searchText) ||
 				$0.additional.localizedCaseInsensitiveContains(searchText)

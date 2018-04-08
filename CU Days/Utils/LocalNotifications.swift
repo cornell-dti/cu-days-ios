@@ -1,6 +1,6 @@
 //
 //  LocalNotifications.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by Vicente Caycedo on 6/13/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.
@@ -111,7 +111,7 @@ class LocalNotifications: NSObject, UNUserNotificationCenterDelegate
 			return
 		}
         UserData.selectedEvents.forEach({ (date, events) in
-            events.forEach({createNotification(for: $0)})
+            events.values.forEach({createNotification(for: $0)})
         })
     }
 	

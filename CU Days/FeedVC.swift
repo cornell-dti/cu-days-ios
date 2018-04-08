@@ -1,6 +1,6 @@
 //
 //  FeedVC.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu and Vicente Caycedo on 3/17/17.
 //  Copyright © 2017 Cornell D&TI. All rights reserved.
@@ -44,7 +44,7 @@ class FeedVC:EmptyStateTableVC, DateContainer
 		tableView.register(FeedCell.self, forCellReuseIdentifier: FEED_CELL_ID)
 		DatePageVC.makeSpaceForDatePicker(in: tableView)
         setNotificationListener()
-		events = FilterVC.filter(UserData.allEvents[date]!)
+		events = FilterVC.filter(UserData.sortedEvents(for: date)!)
 		scrollToNextEvent()
     }
 	
@@ -94,7 +94,7 @@ class FeedVC:EmptyStateTableVC, DateContainer
 	*/
     @objc func updateFeed()
 	{
-		events = FilterVC.filter(UserData.allEvents[date]!)
+		events = FilterVC.filter(UserData.sortedEvents(for: date)!)
         tableView.reloadData()
 	}
 	/**

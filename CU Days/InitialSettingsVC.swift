@@ -1,6 +1,6 @@
 //
 //  InitialSettingsVC.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu on 2017/12/2.
 //  Copyright © 2017年 Cornell SA Tech. All rights reserved.
@@ -29,7 +29,7 @@ class InitialSettingsVC:UIPageViewController, UIPageViewControllerDataSource
 	{
 		let initialSettingsVC = InitialSettingsVC()
 		let navController = UINavigationController(rootViewController: initialSettingsVC)
-		navController.navigationBar.topItem?.title = "O-Week"
+		navController.navigationBar.topItem?.title = "CU-Days"
 		return navController
 	}
 	
@@ -344,8 +344,8 @@ class InitialSettingsVC:UIPageViewController, UIPageViewControllerDataSource
 			
 			//add required events
 			UserData.allEvents.values.flatMap({$0})
-				.filter({UserData.requiredForUser(event: $0)})
-				.forEach({UserData.insertToSelectedEvents($0)})
+				.filter({UserData.requiredForUser(event: $0.value)})
+				.forEach({UserData.insertToSelectedEvents($0.value)})
 			//send notifications
 			LocalNotifications.updateNotifications()
 			

@@ -1,6 +1,6 @@
 //
 //  CoreData.swift
-//  O-Week
+//  CU-Days
 //
 //  Created by David Chu on 2017/6/23.
 //  Copyright © 2017年 Cornell D&TI. All rights reserved.
@@ -17,7 +17,7 @@ protocol CoreDataObject:HasPK
 	/**
 		Reading from `CoreData`.
 	
-		- important: Should have value fields synced with `O-week.xcdatamodeld` and function `saveToCoreData`.
+		- important: Should have value fields synced with `CU-Days.xcdatamodeld` and function `saveToCoreData`.
 	
 		- parameter obj: `CoreData` object containing key-value fields.
 	*/
@@ -25,7 +25,7 @@ protocol CoreDataObject:HasPK
 	/**
 		Saving to `CoreData`.
 	
-		- important: Should have value fields synced with `O-week.xcdatamodeld` and function `init(obj)`.
+		- important: Should have value fields synced with `CU-Days.xcdatamodeld` and function `init(obj)`.
 	
 		- parameters:
 			- entity: Core data magic.
@@ -36,7 +36,7 @@ protocol CoreDataObject:HasPK
 	/**
 		The name of this "entity" in `CoreData`.
 		
-		- important: Should be identical to what is listed under `ENTITIES` in `O-week.xcdatamodeld`
+		- important: Should be identical to what is listed under `ENTITIES` in `CU-Days.xcdatamodeld`
 	*/
 	static var entityName:String { get }
 }
@@ -53,7 +53,7 @@ class CoreData
 		application to it. This property is optional since there are legitimate
 		error conditions that could cause the creation of the store to fail.
 		*/
-		let container = NSPersistentContainer(name: "O-Week")
+		let container = NSPersistentContainer(name: "CU-Days")
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 			if let error = error as NSError? {
 				// Replace this implementation with code to handle the error appropriately.
