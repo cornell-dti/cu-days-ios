@@ -8,21 +8,81 @@
 
 /* Begin PBXBuildFile section */
 		068CF136207A6D770045C896 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068CF135207A6D770045C896 /* AppDelegate.swift */; };
-		068CF138207A6D770045C896 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068CF137207A6D770045C896 /* ViewController.swift */; };
-		068CF13B207A6D770045C896 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 068CF139207A6D770045C896 /* Main.storyboard */; };
 		068CF13D207A6D780045C896 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 068CF13C207A6D780045C896 /* Assets.xcassets */; };
 		068CF140207A6D780045C896 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 068CF13E207A6D780045C896 /* LaunchScreen.storyboard */; };
+		06F7FBB7207A716200FF03BB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06F7FBB6207A716200FF03BB /* MapKit.framework */; };
+		06F7FBDA207A72D500FF03BB /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBB8207A72D100FF03BB /* GradientView.swift */; };
+		06F7FBDB207A72D500FF03BB /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBB9207A72D100FF03BB /* SettingsVC.swift */; };
+		06F7FBDC207A72D500FF03BB /* DatePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBA207A72D100FF03BB /* DatePickerController.swift */; };
+		06F7FBDD207A72D500FF03BB /* CU-Days.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBB207A72D100FF03BB /* CU-Days.xcdatamodeld */; };
+		06F7FBDE207A72D500FF03BB /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBD207A72D100FF03BB /* SearchVC.swift */; };
+		06F7FBDF207A72D500FF03BB /* DateContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBE207A72D100FF03BB /* DateContainer.swift */; };
+		06F7FBE0207A72D500FF03BB /* HasPK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBF207A72D100FF03BB /* HasPK.swift */; };
+		06F7FBE1207A72D500FF03BB /* InitialSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC0207A72D200FF03BB /* InitialSettingsVC.swift */; };
+		06F7FBE2207A72D500FF03BB /* FilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC1207A72D200FF03BB /* FilterVC.swift */; };
+		06F7FBE3207A72D500FF03BB /* PaddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC2207A72D200FF03BB /* PaddedLabel.swift */; };
+		06F7FBE4207A72D500FF03BB /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC3207A72D200FF03BB /* FeedCell.swift */; };
+		06F7FBE5207A72D500FF03BB /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC4207A72D200FF03BB /* UserPreferences.swift */; };
+		06F7FBE6207A72D500FF03BB /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC5207A72D200FF03BB /* Time.swift */; };
+		06F7FBE7207A72D500FF03BB /* Internet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC6207A72D200FF03BB /* Internet.swift */; };
+		06F7FBE8207A72D500FF03BB /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC7207A72D200FF03BB /* Category.swift */; };
+		06F7FBE9207A72D500FF03BB /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC8207A72D200FF03BB /* CoreData.swift */; };
+		06F7FBEA207A72D500FF03BB /* EmptyStateTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC9207A72D200FF03BB /* EmptyStateTableVC.swift */; };
+		06F7FBEB207A72D500FF03BB /* DatePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBCA207A72D200FF03BB /* DatePageVC.swift */; };
+		06F7FBEC207A72D500FF03BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBCB207A72D200FF03BB /* Extensions.swift */; };
+		06F7FBED207A72D500FF03BB /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBCC207A72D200FF03BB /* DateCell.swift */; };
+		06F7FBEE207A72D500FF03BB /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBCD207A72D300FF03BB /* JSONObject.swift */; };
+		06F7FBEF207A72D500FF03BB /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBCE207A72D300FF03BB /* UserData.swift */; };
+		06F7FBF0207A72D500FF03BB /* ScheduleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBCF207A72D300FF03BB /* ScheduleVC.swift */; };
+		06F7FBF1207A72D500FF03BB /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD0207A72D300FF03BB /* TabBarVC.swift */; };
+		06F7FBF2207A72D500FF03BB /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD1207A72D300FF03BB /* LocalNotifications.swift */; };
+		06F7FBF3207A72D500FF03BB /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD2207A72D300FF03BB /* FeedVC.swift */; };
+		06F7FBF4207A72D500FF03BB /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD3207A72D300FF03BB /* Student.swift */; };
+		06F7FBF5207A72D500FF03BB /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD4207A72D300FF03BB /* Event.swift */; };
+		06F7FBF6207A72D500FF03BB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD5207A72D400FF03BB /* Constants.swift */; };
+		06F7FBF8207A72D500FF03BB /* DetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD7207A72D400FF03BB /* DetailsVC.swift */; };
+		06F7FBF9207A72D500FF03BB /* Colleges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD8207A72D400FF03BB /* Colleges.swift */; };
 		869C2CD508B229A287D6DDDA /* Pods_CU_Days.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		068CF132207A6D770045C896 /* CU Days.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CU Days.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		068CF135207A6D770045C896 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		068CF137207A6D770045C896 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		068CF13A207A6D770045C896 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		068CF13C207A6D780045C896 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		068CF13F207A6D780045C896 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		068CF141207A6D780045C896 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		06F7FBB6207A716200FF03BB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		06F7FBB8207A72D100FF03BB /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		06F7FBB9207A72D100FF03BB /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		06F7FBBA207A72D100FF03BB /* DatePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerController.swift; sourceTree = "<group>"; };
+		06F7FBBC207A72D100FF03BB /* O-Week.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "O-Week.xcdatamodel"; sourceTree = "<group>"; };
+		06F7FBBD207A72D100FF03BB /* SearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
+		06F7FBBE207A72D100FF03BB /* DateContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateContainer.swift; sourceTree = "<group>"; };
+		06F7FBBF207A72D100FF03BB /* HasPK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasPK.swift; sourceTree = "<group>"; };
+		06F7FBC0207A72D200FF03BB /* InitialSettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSettingsVC.swift; sourceTree = "<group>"; };
+		06F7FBC1207A72D200FF03BB /* FilterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
+		06F7FBC2207A72D200FF03BB /* PaddedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddedLabel.swift; sourceTree = "<group>"; };
+		06F7FBC3207A72D200FF03BB /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
+		06F7FBC4207A72D200FF03BB /* UserPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		06F7FBC5207A72D200FF03BB /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		06F7FBC6207A72D200FF03BB /* Internet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Internet.swift; sourceTree = "<group>"; };
+		06F7FBC7207A72D200FF03BB /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		06F7FBC8207A72D200FF03BB /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
+		06F7FBC9207A72D200FF03BB /* EmptyStateTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyStateTableVC.swift; sourceTree = "<group>"; };
+		06F7FBCA207A72D200FF03BB /* DatePageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePageVC.swift; sourceTree = "<group>"; };
+		06F7FBCB207A72D200FF03BB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		06F7FBCC207A72D200FF03BB /* DateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
+		06F7FBCD207A72D300FF03BB /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		06F7FBCE207A72D300FF03BB /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		06F7FBCF207A72D300FF03BB /* ScheduleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleVC.swift; sourceTree = "<group>"; };
+		06F7FBD0207A72D300FF03BB /* TabBarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
+		06F7FBD1207A72D300FF03BB /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
+		06F7FBD2207A72D300FF03BB /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
+		06F7FBD3207A72D300FF03BB /* Student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
+		06F7FBD4207A72D300FF03BB /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		06F7FBD5207A72D400FF03BB /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		06F7FBD7207A72D400FF03BB /* DetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsVC.swift; sourceTree = "<group>"; };
+		06F7FBD8207A72D400FF03BB /* Colleges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colleges.swift; sourceTree = "<group>"; };
 		5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CU_Days.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CA1271BBA3016612043C827 /* Pods-CU Days.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CU Days.release.xcconfig"; path = "Pods/Target Support Files/Pods-CU Days/Pods-CU Days.release.xcconfig"; sourceTree = "<group>"; };
 		E29D83A3DFC59D86259D92E6 /* Pods-CU Days.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CU Days.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CU Days/Pods-CU Days.debug.xcconfig"; sourceTree = "<group>"; };
@@ -33,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06F7FBB7207A716200FF03BB /* MapKit.framework in Frameworks */,
 				869C2CD508B229A287D6DDDA /* Pods_CU_Days.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,14 +122,59 @@
 		068CF134207A6D770045C896 /* CU Days */ = {
 			isa = PBXGroup;
 			children = (
+				06F7FBFC207A731900FF03BB /* Utils */,
+				06F7FBFB207A731000FF03BB /* Models */,
+				06F7FBBB207A72D100FF03BB /* CU-Days.xcdatamodeld */,
+				06F7FBCC207A72D200FF03BB /* DateCell.swift */,
+				06F7FBCA207A72D200FF03BB /* DatePageVC.swift */,
+				06F7FBBA207A72D100FF03BB /* DatePickerController.swift */,
+				06F7FBD7207A72D400FF03BB /* DetailsVC.swift */,
+				06F7FBC3207A72D200FF03BB /* FeedCell.swift */,
+				06F7FBD2207A72D300FF03BB /* FeedVC.swift */,
+				06F7FBC1207A72D200FF03BB /* FilterVC.swift */,
+				06F7FBC0207A72D200FF03BB /* InitialSettingsVC.swift */,
+				06F7FBCF207A72D300FF03BB /* ScheduleVC.swift */,
+				06F7FBBD207A72D100FF03BB /* SearchVC.swift */,
+				06F7FBB9207A72D100FF03BB /* SettingsVC.swift */,
+				06F7FBD0207A72D300FF03BB /* TabBarVC.swift */,
+				06F7FBCE207A72D300FF03BB /* UserData.swift */,
 				068CF135207A6D770045C896 /* AppDelegate.swift */,
-				068CF137207A6D770045C896 /* ViewController.swift */,
-				068CF139207A6D770045C896 /* Main.storyboard */,
 				068CF13C207A6D780045C896 /* Assets.xcassets */,
 				068CF13E207A6D780045C896 /* LaunchScreen.storyboard */,
 				068CF141207A6D780045C896 /* Info.plist */,
 			);
 			path = "CU Days";
+			sourceTree = "<group>";
+		};
+		06F7FBFB207A731000FF03BB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				06F7FBD4207A72D300FF03BB /* Event.swift */,
+				06F7FBC7207A72D200FF03BB /* Category.swift */,
+				06F7FBD8207A72D400FF03BB /* Colleges.swift */,
+				06F7FBC8207A72D200FF03BB /* CoreData.swift */,
+				06F7FBBE207A72D100FF03BB /* DateContainer.swift */,
+				06F7FBC9207A72D200FF03BB /* EmptyStateTableVC.swift */,
+				06F7FBB8207A72D100FF03BB /* GradientView.swift */,
+				06F7FBBF207A72D100FF03BB /* HasPK.swift */,
+				06F7FBCD207A72D300FF03BB /* JSONObject.swift */,
+				06F7FBC2207A72D200FF03BB /* PaddedLabel.swift */,
+				06F7FBD3207A72D300FF03BB /* Student.swift */,
+				06F7FBC5207A72D200FF03BB /* Time.swift */,
+				06F7FBC4207A72D200FF03BB /* UserPreferences.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		06F7FBFC207A731900FF03BB /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				06F7FBD5207A72D400FF03BB /* Constants.swift */,
+				06F7FBCB207A72D200FF03BB /* Extensions.swift */,
+				06F7FBC6207A72D200FF03BB /* Internet.swift */,
+				06F7FBD1207A72D300FF03BB /* LocalNotifications.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		3502D0BBCD27C0EF262D6807 /* Pods */ = {
@@ -83,6 +189,7 @@
 		E61B5C26A8BA3AB58AA30D59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				06F7FBB6207A716200FF03BB /* MapKit.framework */,
 				5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */,
 			);
 			name = Frameworks;
@@ -122,6 +229,14 @@
 				TargetAttributes = {
 					068CF131207A6D760045C896 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -150,7 +265,6 @@
 			files = (
 				068CF140207A6D780045C896 /* LaunchScreen.storyboard in Resources */,
 				068CF13D207A6D780045C896 /* Assets.xcassets in Resources */,
-				068CF13B207A6D770045C896 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,22 +316,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				068CF138207A6D770045C896 /* ViewController.swift in Sources */,
+				06F7FBE0207A72D500FF03BB /* HasPK.swift in Sources */,
+				06F7FBED207A72D500FF03BB /* DateCell.swift in Sources */,
+				06F7FBE5207A72D500FF03BB /* UserPreferences.swift in Sources */,
+				06F7FBF2207A72D500FF03BB /* LocalNotifications.swift in Sources */,
+				06F7FBF5207A72D500FF03BB /* Event.swift in Sources */,
+				06F7FBE7207A72D500FF03BB /* Internet.swift in Sources */,
+				06F7FBE4207A72D500FF03BB /* FeedCell.swift in Sources */,
+				06F7FBF0207A72D500FF03BB /* ScheduleVC.swift in Sources */,
+				06F7FBE9207A72D500FF03BB /* CoreData.swift in Sources */,
+				06F7FBF8207A72D500FF03BB /* DetailsVC.swift in Sources */,
+				06F7FBF6207A72D500FF03BB /* Constants.swift in Sources */,
+				06F7FBF3207A72D500FF03BB /* FeedVC.swift in Sources */,
+				06F7FBF1207A72D500FF03BB /* TabBarVC.swift in Sources */,
+				06F7FBDB207A72D500FF03BB /* SettingsVC.swift in Sources */,
+				06F7FBEB207A72D500FF03BB /* DatePageVC.swift in Sources */,
+				06F7FBEE207A72D500FF03BB /* JSONObject.swift in Sources */,
 				068CF136207A6D770045C896 /* AppDelegate.swift in Sources */,
+				06F7FBEA207A72D500FF03BB /* EmptyStateTableVC.swift in Sources */,
+				06F7FBDC207A72D500FF03BB /* DatePickerController.swift in Sources */,
+				06F7FBDD207A72D500FF03BB /* CU-Days.xcdatamodeld in Sources */,
+				06F7FBE3207A72D500FF03BB /* PaddedLabel.swift in Sources */,
+				06F7FBEC207A72D500FF03BB /* Extensions.swift in Sources */,
+				06F7FBDA207A72D500FF03BB /* GradientView.swift in Sources */,
+				06F7FBE8207A72D500FF03BB /* Category.swift in Sources */,
+				06F7FBF9207A72D500FF03BB /* Colleges.swift in Sources */,
+				06F7FBEF207A72D500FF03BB /* UserData.swift in Sources */,
+				06F7FBDE207A72D500FF03BB /* SearchVC.swift in Sources */,
+				06F7FBE1207A72D500FF03BB /* InitialSettingsVC.swift in Sources */,
+				06F7FBE6207A72D500FF03BB /* Time.swift in Sources */,
+				06F7FBF4207A72D500FF03BB /* Student.swift in Sources */,
+				06F7FBE2207A72D500FF03BB /* FilterVC.swift in Sources */,
+				06F7FBDF207A72D500FF03BB /* DateContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		068CF139207A6D770045C896 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				068CF13A207A6D770045C896 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		068CF13E207A6D780045C896 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -351,11 +487,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UJQ88SCQSQ;
 				INFOPLIST_FILE = "CU Days/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cornelldti.CU-Days";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -367,11 +507,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UJQ88SCQSQ;
 				INFOPLIST_FILE = "CU Days/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cornelldti.CU-Days";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -397,6 +541,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		06F7FBBB207A72D100FF03BB /* CU-Days.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				06F7FBBC207A72D100FF03BB /* O-Week.xcdatamodel */,
+			);
+			currentVersion = 06F7FBBC207A72D100FF03BB /* O-Week.xcdatamodel */;
+			path = "CU-Days.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 068CF12A207A6D760045C896 /* Project object */;
 }
