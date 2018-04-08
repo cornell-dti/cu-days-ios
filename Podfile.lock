@@ -1,0 +1,20 @@
+PODS:
+  - PKHUD (5.0.0)
+  - PureLayout (3.0.2)
+
+DEPENDENCIES:
+  - PKHUD (~> 5.0)
+  - PureLayout
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - PKHUD
+    - PureLayout
+
+SPEC CHECKSUMS:
+  PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
+  PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
+
+PODFILE CHECKSUM: 2752f52331af09fe10d79fc2db06b897a5c60662
+
+COCOAPODS: 1.5.0
