@@ -15,7 +15,7 @@ import SystemConfiguration
 class Internet
 {
 	//Link to the website where all event info is stored.
-    static let DATABASE = "https://oweekapp.herokuapp.com/flow/"
+    static let DATABASE = "https://cornelldays.herokuapp.com/cornell_days/"
     
     //suppress default constructor for noninstantiability
     private init(){}
@@ -79,18 +79,18 @@ class Internet
 	Sets an image corresponding to `event` into `imageView`. Attempts to retrieve image from saved files first, then attempts to downlaod image if no saved file exists.
 	
 	- Parameters:
-		- event: Event whose image we must fetch.
+		- imagePk: Unique id of image.
 		- imageView: View to display the image.
 	*/
-    static func getImageFor(_ event:Event, imageView:UIImageView)
+    static func getImageFor(_ imagePk:Int, imageView:UIImageView)
     {
-		if let image = UserData.loadImageFor(event.pk)
+		if let image = UserData.loadImageFor(imagePk)
 		{
 			imageView.image = image
 		}
 		else
 		{
-			imageFrom("\(DATABASE)event/\(event.pk)/image", imageView: imageView, event: event)
+			imageFrom("\(DATABASE)event/\(imagePk)/image", imageView: imageView, imagePk: imagePk)
 		}
     }
 	/**
@@ -99,9 +99,9 @@ class Internet
 	- Parameters:
 		- urlString: URL of image to download.
 		- imageView: View to display the image.
-		- event: Event that will be associated with the image once it is saved.
+		- imagePk: Unique id of image.
 	*/
-	private static func imageFrom(_ urlString:String, imageView:UIImageView, event:Event)
+	private static func imageFrom(_ urlString:String, imageView:UIImageView, imagePk:Int)
     {
         guard let url = URL(string: urlString) else {
             return
@@ -117,7 +117,7 @@ class Internet
                 if let downloadedImage = UIImage(data: data!)
                 {
                     runAsyncFunction({imageView.image = downloadedImage})
-					UserData.saveImage(downloadedImage, eventPk: event.pk)
+					UserData.saveImage(downloadedImage, imagePk: imagePk)
                 }
             }
         })

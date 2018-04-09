@@ -15,9 +15,9 @@ import UIKit
 
 	`allEvents`: All events on disk with PKs as keys.
 	`selectedEvents`: All events selected by the user with PKs as keys.
-	`categories`: All categories on disk with PKs as keys.
-	`DATES`: Dates of the orientation. Determined from `YEAR`, `MONTH`, `START_DAY`,
-	and `END_DAY`.
+	`collegeCategories`: All categories representing colleges with PKs as keys.
+	`typeCategories`: All categories representing types with PKs as keys.
+	`DATES`: Dates of the orientation.
 	`selectedDate`: The date to display events for.
 */
 class UserData
@@ -25,8 +25,6 @@ class UserData
     //UserDefaults keys
     static let addedPKsName = "AddedPKs" //KeyPath used for accessing added PKs
 	static let versionName = "version" //KeyPath used for accessing local version to compare with database
-	static let studentTypeName = "student" //KeyPath used for accessing whether the student is a transfer. See `Student` and `studentTypePk`.
-	static let collegeTypeName = "college" //KeyPath used for accessing the college of the user. See `Colleges` and `collegePk`.
     
     //Events
 	static var allEvents = [Date: [Int:Event]]()
@@ -39,16 +37,12 @@ class UserData
     static var DATES = [Date]()
 	static var selectedDate:Date!
 	static let YEAR = 2018
-	static let MONTH = 1
-	static let START_DAY = 18	//Dates range: [START_DAY, END_DAY], inclusive
-	static let END_DAY = 23		//Note: END_DAY must > START_DAY
+	static let MONTH = 4
+	static let DAYS = [12,13,16,19,20,23]
 	
 	//Categories
-	static var categories = [Int:Category]()
-	
-	//User identity
-	static var studentTypePk:Int? = nil
-	static var collegePk:Int? = nil
+	static var collegeCategories = [Int:Category]()
+	static var typeCategories = [Int:Category]()
 	
     private init(){}
 	
@@ -61,42 +55,23 @@ class UserData
 		var dateComponents = DateComponents()
 		dateComponents.year = YEAR
 		dateComponents.month = MONTH
-		dateComponents.day = START_DAY
+		dateComponents.day = DAYS[0]
 		
 		selectedDate = UserData.userCalendar.date(from: dateComponents)!
 		
 		//this assumes END_DAY is larger than START_DAY
-		while (dateComponents.day! <= END_DAY)
+		for day in DAYS
 		{
+			dateComponents.day = day
 			let date = UserData.userCalendar.date(from: dateComponents)!
 			DATES.append(date)
 			selectedEvents[date] = [Int:Event]()
 			allEvents[date] = [Int:Event]()
-			dateComponents.day! += 1
 			
 			if (UserData.userCalendar.compare(today, to: date, toGranularity: .day) == .orderedSame)
 			{
 				selectedDate = date
 			}
-		}
-	}
-	/**
-		Sets `studentTypePk` and `collegePk` according to saved values.
-	*/
-	private static func initStudentIdentity()
-	{
-		let defaults = UserDefaults.standard
-		let storedStudentPk = defaults.integer(forKey: studentTypeName)
-		let storedCollegePk = defaults.integer(forKey: collegeTypeName)
-		
-		//the integer might be the default value (and not something we saved). Check.
-		if (Student.studentForPk(storedStudentPk) != nil)
-		{
-			studentTypePk = storedStudentPk
-		}
-		if (Colleges.collegeForPk(storedCollegePk) != nil)
-		{
-			collegePk = storedCollegePk
 		}
 	}
 	/**
@@ -116,18 +91,22 @@ class UserData
 	static func loadData()
 	{
 		initDates()
-		initStudentIdentity()
 		
 		//load from CoreData
 		let eventData = fetchFromCoreData(Event.self)
 		eventData.forEach({appendToAllEvents(Event($0))})
 		
 		let categoryData = fetchFromCoreData(Category.self)
-		categories = categoryData.reduce(into: [Int:Category](), {
-			map, data in
-			let category = Category(data)
-			map[category.pk] = category
-		})
+		for datum in categoryData
+		{
+			let category = Category(datum)
+			if (category.isCollege) {
+				collegeCategories[category.pk] = category
+			}
+			else {
+				typeCategories[category.pk] = category
+			}
+		}
 		
 		let addedPKs = getAddedPKs()
 		addedPKs.forEach({pk in
@@ -144,14 +123,16 @@ class UserData
 			//update categories
 			changedCategories.forEach({updateCategory($0)})
 			deletedCategoryPks.forEach({removeFromCoreData(entityName: Category.entityName, pk: $0)})
-			deletedCategoryPks.forEach({categories.removeValue(forKey: $0)})
+			deletedCategoryPks.forEach({pk in
+				collegeCategories.removeValue(forKey: pk)
+				typeCategories.removeValue(forKey: pk)
+			})
 			
 			//update events
 			changedEvents.forEach({updateEvent($0)})
 			deletedEventPks.forEach({
 				eventPk in
 				UserData.removeFromCoreData(entityName: Event.entityName, pk: eventPk)
-				UserData.removeImageOf(eventPk)
 			})
 			for date in DATES
 			{
@@ -182,39 +163,6 @@ class UserData
 			//save updated database version
 			version = newVersion
 		})
-	}
-	
-	/**
-		Returns true if the event is required for the user based on the user's identity.
-		- parameter event: The event to check.
-		- returns: True if the event is required for this user in particular, false otherwise.
-	*/
-	static func requiredForUser(event: Event) -> Bool
-	{
-		if (event.required)
-		{
-			return true
-		}
-		if (event.categoryRequired)
-		{
-			if let student = studentTypePk
-			{
-				if (student == event.category)
-				{
-					//required for student's type
-					return true
-				}
-			}
-			if let college = collegePk
-			{
-				if (college == event.category)
-				{
-					//required for student's college
-					return true
-				}
-			}
-		}
-		return false
 	}
 	
     // MARK:- Search Functions
@@ -330,6 +278,7 @@ class UserData
 	*/
 	static func updateEvent(_ event:Event)
 	{
+		removeFromAllEvents(event)
 		appendToAllEvents(event)
 		removeFromCoreData(entityName: Event.entityName, pk: event.pk)
 		saveToCoreData(event)
@@ -352,7 +301,12 @@ class UserData
 	static func updateCategory(_ category:Category)
 	{
 		removeFromCoreData(entityName: Category.entityName, pk: category.pk)
-		categories[category.pk] = category
+		if (category.isCollege) {
+			collegeCategories[category.pk] = category
+		}
+		else {
+			typeCategories[category.pk] = category
+		}
 		saveToCoreData(category)
 	}
 	
@@ -408,33 +362,23 @@ class UserData
 		
 		- parameters:
 			- image: Image to save.
-			- event: The pk of the event this image belongs to. The image will be saved with the `event.pk` as its name so we can access it next time using the event.
+			- imagePk: Unique id of image.
 	*/
-	static func saveImage(_ image:UIImage, eventPk:Int)
+	static func saveImage(_ image:UIImage, imagePk:Int)
 	{
 		let imageData = UIImagePNGRepresentation(image)
-		let url = documentURLForName("\(eventPk).png")
+		let url = documentURLForName("\(imagePk).png")
 		try? imageData?.write(to: url)
 	}
 	/**
-		Deletes the image of the given event from disk.
+		Reads from disk an image for the given id.
 	
-		- parameter event: Event whose image we wish to delete.
-	*/
-	static func removeImageOf(_ eventPk:Int)
-	{
-		let url = documentURLForName("\(eventPk).png")
-		try? FileManager.default.removeItem(at: url)
-	}
-	/**
-		Reads from disk an image for the given event.
-	
-		- parameter event: Event whose image we wish to read from disk.
+		- parameter imagePk: Unique id of image.
 		- returns: Image if one was found, nil otherwise.
 	*/
-	static func loadImageFor(_ eventPk:Int) -> UIImage?
+	static func loadImageFor(_ imagePk:Int) -> UIImage?
 	{
-		let url = documentURLForName("\(eventPk).png")
+		let url = documentURLForName("\(imagePk).png")
 		return UIImage(contentsOfFile: url.path)
 	}
 	/**
@@ -484,36 +428,5 @@ class UserData
 			let defaults = UserDefaults.standard
 			defaults.set(newValue, forKey: versionName)
 		}
-	}
-	/**
-		Saves what type of student the user is.
-		- parameter pk: Pk of the category that is the user's identity. Should match values in `Student`.
-	*/
-	static func setStudentType(pk:Int)
-	{
-		let defaults = UserDefaults.standard
-		defaults.set(pk, forKey: studentTypeName)
-		studentTypePk = pk
-	}
-	/**
-		Saves the college the user is in.
-		- parameter pk: Pk of the category that is the user's college. Should match values in `Colleges`.
-	*/
-	static func setCollegeType(pk:Int)
-	{
-		let defaults = UserDefaults.standard
-		defaults.set(pk, forKey: collegeTypeName)
-		collegePk = pk
-	}
-	/**
-		Returns whether or not this is the first time the user's opened the app.
-		Based on whether the college pk value is saved.
-		- returns: True if the user had not used the app before.
-	*/
-	static func isFirstRun() -> Bool
-	{
-		let defaults = UserDefaults.standard
-		let collegeTypePk = defaults.integer(forKey: collegeTypeName)
-		return Colleges.collegeForPk(collegeTypePk) == nil
 	}
 }

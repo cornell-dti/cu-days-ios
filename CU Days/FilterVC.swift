@@ -11,15 +11,16 @@ import UIKit
 /**
 	Displays a list of categories for the user to filter events in `FeedVC`.
 	`tableSections`: Sections of cells. Each element has a name, which is the section's header, rows, cells within the section, and data, the data associated with the row.
-	`selectedFilters`: All category pks that are selected. Used to keep track of applied filters.
+	`collegeFilter`: Events belonging to this college will show in feed.
+	`typeFilter`: Events belonging to this type will show in feed.
 */
 class FilterVC: UITableViewController
 {
-	let showRequiredEventsCell = UITableViewCell.newAutoLayout()
-	
-	var tableSections = [(name:String, rows:[(cell:UITableViewCell, data:HasPK?)])]()
-	static var requiredFilter = false
-	static var selectedFilters:Set<Int> = []
+	var tableSections = [(name:String, rows:[(cell:UITableViewCell, data:Category)])]()
+	static var collegeFilter:Category?
+	static var typeFilter:Category?
+	var selectedCollegeCell:UITableViewCell?
+	var selectedTypeCell:UITableViewCell?
 	
 	/**
 		Sets the table to `grouped` style, the title to "Filter", and creates the table view cells.
@@ -37,31 +38,24 @@ class FilterVC: UITableViewController
 	*/
 	private func configureTableSections()
 	{
-		showRequiredEventsCell.textLabel?.text = "Required events"
-		
-		tableSections.append((name: "", rows: [(cell: showRequiredEventsCell, data: nil)]))
-		//put student types in 2nd section
-		tableSections.append((name: "Students", rows: Student.ORDERED.map({
-			student in
-			let cell = UITableViewCell.newAutoLayout()
-			cell.textLabel?.text = student.rawValue
-			return (cell: cell, data: student)
-		})))
-		//put colleges in 3rd section
-		tableSections.append((name: "Colleges", rows: Colleges.ORDERED.map({
-			college in
-			let cell = UITableViewCell.newAutoLayout()
-			cell.textLabel?.text = college.rawValue
-			return (cell: cell, data: college)
-		})))
-		//put all the categories that aren't colleges in the last section
-		tableSections.append((name: "", rows: UserData.categories
-			.values.filter({Colleges.collegeForPk($0.pk) == nil}).map({
+		//put colleges in 1st section
+		tableSections.append((name: "Colleges", rows:
+			UserData.collegeCategories.values.sorted().map({
 				category in
 				let cell = UITableViewCell.newAutoLayout()
 				cell.textLabel?.text = category.name
 				return (cell: cell, data: category)
-			})))
+			})
+		))
+		//put types in 2nd section
+		tableSections.append((name: "Types", rows:
+			UserData.typeCategories.values.sorted().map({
+				category in
+				let cell = UITableViewCell.newAutoLayout()
+				cell.textLabel?.text = category.name
+				return (cell: cell, data: category)
+			})
+		))
 	}
 	
     // MARK:- TableView Methods
@@ -91,34 +85,20 @@ class FilterVC: UITableViewController
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
 	{
       	let cellAndData = tableSections[indexPath.section].rows[indexPath.row]
-		let cell = cellAndData.cell
 		
-		//check if the cell is the "Required" special cell or just a category
-		if let data = cellAndData.data
+		if (cellAndData.data.isCollege)
 		{
-			if (FilterVC.selectedFilters.contains(data.pk))
-			{
-				cell.accessoryType = .none
-				FilterVC.selectedFilters.remove(data.pk)
-			}
-			else
-			{
-				cell.accessoryType = .checkmark
-				FilterVC.selectedFilters.insert(data.pk)
-			}
+			selectedCollegeCell?.accessoryType = .none
+			cellAndData.cell.accessoryType = .checkmark
+			selectedCollegeCell = cellAndData.cell
+			FilterVC.collegeFilter = cellAndData.data
 		}
 		else
 		{
-			if (FilterVC.requiredFilter)
-			{
-				cell.accessoryType = .none
-				FilterVC.requiredFilter = false
-			}
-			else
-			{
-				cell.accessoryType = .checkmark
-				FilterVC.requiredFilter = true
-			}
+			selectedTypeCell?.accessoryType = .none
+			cellAndData.cell.accessoryType = .checkmark
+			selectedTypeCell = cellAndData.cell
+			FilterVC.typeFilter = cellAndData.data
 		}
 		
 		tableView.deselectRow(at: indexPath, animated: true)
@@ -130,9 +110,12 @@ class FilterVC: UITableViewController
 	*/
 	@objc func onCancelClick()
 	{
-		FilterVC.requiredFilter = false
-		FilterVC.selectedFilters.removeAll()
-		tableSections.forEach({$0.rows.forEach({$0.cell.accessoryType = .none})})
+		selectedCollegeCell?.accessoryType = .none
+		selectedTypeCell?.accessoryType = .none
+		selectedCollegeCell = nil
+		selectedTypeCell = nil
+		FilterVC.collegeFilter = nil
+		FilterVC.typeFilter = nil
 		NotificationCenter.default.post(name: .reloadData, object: nil)
 	}
 	/**
@@ -143,17 +126,19 @@ class FilterVC: UITableViewController
 	static func filter(_ events:[Event]) -> [Event]
 	{
 		//no filter active
-		if (selectedFilters.isEmpty && !requiredFilter) {
+		if (FilterVC.collegeFilter == nil && FilterVC.typeFilter == nil) {
 			return events
 		}
 		
 		return events.filter({
 			event in
-			if (requiredFilter && UserData.requiredForUser(event: event))
-			{
+			if (FilterVC.collegeFilter != nil && FilterVC.collegeFilter!.pk == event.collegeCategory) {
 				return true
 			}
-			return selectedFilters.contains(event.category)
+			if (FilterVC.typeFilter != nil && FilterVC.typeFilter!.pk == event.typeCategory) {
+				return true
+			}
+			return false
 		})
 	}
 }

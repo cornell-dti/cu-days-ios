@@ -9,6 +9,8 @@
 import UIKit
 import CoreData
 import UserNotifications
+import GooglePlaces
+import GoogleMaps
 
 /**
 	First class that is accessed when app first launches. Responsible for setting up stylistic themes, notifications, and handling app life cycle events.
@@ -16,6 +18,7 @@ import UserNotifications
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
+	let googleApiKey = "AIzaSyD9vNxg2NwZtWKOWj9ZV_YC042kr00rDJA"
 	var window: UIWindow?
 	var delegate:LocalNotifications!
 	
@@ -26,7 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         LocalNotifications.requestPermissionForNotifications()
         setDelegateForNotifications()
         UserData.loadData()
-		startFirstVC()
+		
+		GMSPlacesClient.provideAPIKey(googleApiKey)
+		GMSServices.provideAPIKey(googleApiKey)
+		
+		window!.rootViewController = TabBarVC()
+		window!.makeKeyAndVisible()
 		
         return true
     }
@@ -55,22 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 		let switchAppearance = UISwitch.appearance()
 		switchAppearance.onTintColor = Colors.RED
     }
-	
-	/**
-		Starts the initial view controller with a navigation bar.
-	*/
-	private func startFirstVC()
-	{
-		if (UserData.isFirstRun())
-		{
-			window!.rootViewController = InitialSettingsVC.createWithNavBar()
-		}
-		else
-		{
-			window!.rootViewController = TabBarVC()
-		}
-		window!.makeKeyAndVisible()
-	}
 	
     private func setDelegateForNotifications()
 	{

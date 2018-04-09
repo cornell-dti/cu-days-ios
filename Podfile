@@ -8,4 +8,6 @@ target 'CU Days' do
   # Pods for CU Days
   pod 'PureLayout'
   pod 'PKHUD', '~> 5.0'
+  pod 'GooglePlaces'
+  pod 'GoogleMaps'
 end

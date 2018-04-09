@@ -14,11 +14,12 @@ import CoreData
 
 	Notable fields are explained below:
 
-	`category`: The `Category.pk` of the `Category` this event belongs to.
+	`collegeCategory`: The `Category.pk` of the `Category` this event belongs to.
+	`typeCategory`: Same as collegeCategory.
 	`date`: The date in which this event BEGINS. If this event crosses over midnight, the date is that of the 1st day.
-	`categoryRequired`: True if this event is required by its category.
-	`additional`: Additional information to display in a special format. Formatted like so:
-			## HEADER ## ____BULLET # INFO ____BULLET # INFO
+	`placeId`: String identifying location of event.
+	`full`: Is this event full.
+	`imagePk`: Pk value of the image this event is linked to.
 
 	- Important: Since events can cross over midnight, the `endTime` may not be "after" the `#startTime`. Calculations should take this into account.
 
@@ -30,15 +31,15 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
     let title: String
     let caption: String
     let description: String
-    let category: Int
+    let collegeCategory: Int
+	let typeCategory: Int
     let startTime: Time
     let endTime: Time
-    let required: Bool
     let date: Date
-	let longitude: Double
-	let latitude: Double
-	let categoryRequired: Bool
 	let additional: String
+	let placeId: String
+	let full: Bool
+	let imagePk: Int
     let pk: Int
     
     var hashValue: Int
@@ -52,31 +53,31 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 			- title: For example, "New Student Check-In"
 			- caption: For example, "Bartels Hall"
 			- description: For example, "You are required to attend New Student Check-In to pick up..."
-			- category: See class description.
+			- collegeCategory: See class description.
+			- typeCategory: See class description.
 			- date: For example, 7/19/2017
 			- start: For example, 8:00 AM
 			- end: For example, 4:00 PM
-			- required: Whether this event is required for new students.
-			- categoryRequired: Whether this event is required for its category.
-			- additional: For example, ## All new students are required to attend this program at the following times: ## ____3:30pm # Residents of Balch, Jameson, Risley, Just About Music, Ecology House, and Latino Living Center; on-campus transfers in Call Alumni Auditorium ____5:30pm # Residents of Dickson, McLLU, Donlon, High Rise 5, and Ujamaa; off-campus transfers in Call Alumni Auditorium ____8:00pm # Residents of Townhouses, Low Rises, Court-Kay-Bauer, Mews, Holland International Living Center, and Akwe:kon
-			- longitude: For example, -76.4785000
-			- latitude: For example, 42.4439000
+			- additional: For example, ART 2701: Introduction to Digital Media
+			- placeId: For example, ChIJndqRYRqC0IkR9J8bgk3mDvU
+			- full: See class description.
+			- imagePk: Unique positive ID given to each image starting from 1.
 			- pk: Unique positive ID given to each event starting from 1.
 	*/
-	init(title:String, caption:String, category:Int, pk: Int, start:Time, end:Time, date: Date, required: Bool, description: String?, longitude:Double, latitude:Double, categoryRequired:Bool, additional:String)
+	init(title:String, caption:String, collegeCategory:Int, typeCategory:Int, pk: Int, start:Time, end:Time, date: Date, description: String, placeId:String, full:Bool, imagePk:Int, additional:String)
     {
         self.title = title
         self.caption = caption
-        self.category = category
-        self.description = description ?? "No description available at this time."
+        self.collegeCategory = collegeCategory
+		self.typeCategory = typeCategory
+        self.description = description
         self.date = date
-        self.required = required
         self.pk = pk
         startTime = start
         endTime = end
-		self.longitude = longitude
-		self.latitude = latitude
-		self.categoryRequired = categoryRequired
+		self.placeId = placeId
+		self.full = full
+		self.imagePk = imagePk
 		self.additional = additional
     }
 	/**
@@ -89,32 +90,33 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 				caption => String
 				pk => int
 				eventDescription => String
-				category => int
+				collegeCategory => int
+				typeCategory => int
 				startTimeHr => int
 				startTimeMin => int
 				endTimeHr => int
 				endTimeMin => int
 				required => bool
 				date => Date
-				longitude => Double
-				latitude => Double
-				categoryRequired => boolean
+				placeId => String
+				full => boolean
+				imagePk => int
 				additional => String
 	*/
     init(_ obj: NSManagedObject)
 	{
         title = obj.value(forKeyPath: "title") as! String
         caption = obj.value(forKeyPath: "caption") as! String
-        description = obj.value(forKeyPath: "eventDescription") as? String ?? "No description available at this time"
-        category = obj.value(forKey: "category") as! Int
+        description = obj.value(forKeyPath: "eventDescription") as! String
+        collegeCategory = obj.value(forKey: "collegeCategory") as! Int
+		typeCategory = obj.value(forKey: "typeCategory") as! Int
         startTime = Time(hour: obj.value(forKeyPath: "startTimeHr") as! Int, minute: obj.value(forKeyPath: "startTimeMin") as! Int)
         endTime = Time(hour: obj.value(forKeyPath: "endTimeHr") as! Int, minute: obj.value(forKeyPath: "endTimeMin") as! Int)
-        required = obj.value(forKeyPath: "required") as! Bool
         date = obj.value(forKeyPath: "date") as! Date
         pk = obj.value(forKeyPath: "pk") as! Int
-		longitude = obj.value(forKey: "longitude") as! Double
-		latitude = obj.value(forKey: "latitude") as! Double
-		categoryRequired = obj.value(forKey: "categoryRequired") as! Bool
+		placeId = obj.value(forKey: "placeId") as! String
+		full = obj.value(forKey: "full") as! Bool
+		imagePk = obj.value(forKey: "imagePk") as! Int
 		additional = obj.value(forKey: "additional") as! String
     }
 	/**
@@ -125,14 +127,14 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 				location => String
 				pk => int
 				description => String
-				category => int
+				collegeCategory => int
+				typeCategory => int
 				start_time => Time. See `Time.fromString()`
 				end_time => Time. See `Time.fromString()`
-				required => bool
 				start_date => Date, formatted as "yyyy-MM-dd"
-				longitude => Double
-				latitude => Double
-				category_required => boolean
+				placeId => String
+				full => boolean
+				imagePk => int
 				additional => String
 	*/
     init?(jsonOptional: [String:Any]?)
@@ -142,17 +144,14 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
                 let pk = json["pk"] as? Int,
                 let description = json["description"] as? String,
                 let location = json["location"] as? String,
-                let category = json["category"] as? Int,
                 let startDate = json["start_date"] as? String,
                 let startTime = json["start_time"] as? String,
                 let endTime = json["end_time"] as? String,
-				let required = json["required"] as? Bool,
-			//convert first to String, then to Double. Converting directly to Double will create an error
-				let longitudeStr = json["longitude"] as? String,
-				let longitude = Double(longitudeStr),
-				let latitudeStr = json["latitude"] as? String,
-				let latitude = Double(latitudeStr),
-				let categoryRequired = json["category_required"] as? Bool,
+				let placeId = json["place_ID"] as? String,
+				let full = json["full"] as? Bool,
+				let imagePk = json["image_pk"] as? Int,
+				let collegeCategory = json["college_category"] as? Int,
+				let typeCategory = json["type_category"] as? Int,
 				let additional = json["additional"] as? String else {
 			print("Event.jsonOptional: incorrect JSON format")
             return nil
@@ -162,11 +161,11 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
         self.title = title
         self.caption = location
         self.description = description
-        self.category = category
-		self.required = required
-		self.longitude = longitude
-		self.latitude = latitude
-		self.categoryRequired = categoryRequired
+        self.collegeCategory = collegeCategory
+		self.typeCategory = typeCategory
+		self.placeId = placeId
+		self.imagePk = imagePk
+		self.full = full
 		self.additional = additional
         
         let dateFormatter = DateFormatter()
@@ -199,57 +198,14 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 		obj.setValue(startTime.minute, forKeyPath: "startTimeMin")
 		obj.setValue(endTime.hour, forKeyPath: "endTimeHr")
 		obj.setValue(endTime.minute, forKeyPath: "endTimeMin")
-		obj.setValue(required, forKeyPath: "required")
+		obj.setValue(full, forKeyPath: "full")
 		obj.setValue(date, forKeyPath: "date")
-		obj.setValue(category, forKey: "category")
-		obj.setValue(longitude, forKey: "longitude")
-		obj.setValue(latitude, forKey: "latitude")
-		obj.setValue(categoryRequired, forKey: "categoryRequired")
+		obj.setValue(collegeCategory, forKey: "collegeCategory")
+		obj.setValue(typeCategory, forKey: "typeCategory")
+		obj.setValue(placeId, forKey: "placeId")
+		obj.setValue(imagePk, forKey: "imagePk")
 		obj.setValue(additional, forKey: "additional")
 		return obj
-	}
-	
-	/**
-		Returns the formatted additional text, with headers and bullets.
-		String is like so: ## HEADER ## ____BULLET # INFO ____BULLET # INFO.
-		- important: Check that `additional` is not empty before calling this method.
-		
-		- returns: Formatted text
-	*/
-	func attributedAdditional() -> NSAttributedString
-	{
-		let TEXT_SIZE:CGFloat = 16
-		
-		let string = NSMutableAttributedString()
-		let headerAndRemaining = additional.components(separatedBy: "##")
-		let header = "\(headerAndRemaining[1].trimmingCharacters(in: .whitespacesAndNewlines))\n"
-		let remaining = headerAndRemaining[2].trimmingCharacters(in: .whitespacesAndNewlines)
-		
-		//set header
-		let headerAttributes = [NSAttributedStringKey.font: UIFont(name: Font.DEMIBOLD, size: TEXT_SIZE)!]
-		let attributedHeader = NSAttributedString(string: header, attributes: headerAttributes)
-		string.append(attributedHeader)
-		
-		let sections = remaining.components(separatedBy: "____")
-		for section in sections
-		{
-			guard !section.isEmpty else {
-				continue
-			}
-			let bulletAndInfo = section.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: " # ")
-			let bullet = "\(bulletAndInfo[0])\t"
-			let info = "\(bulletAndInfo[1])\n"
-			
-			//set bullet
-			let attributedBullet = NSAttributedString(string: bullet, attributes:[.font: UIFont(name: Font.DEMIBOLD, size: TEXT_SIZE)!, .foregroundColor: Colors.RED])
-			string.append(attributedBullet)
-			
-			//set info
-			let attributedInfo = NSAttributedString(string: info, attributes: [.font:UIFont(name: Font.REGULAR, size: 14)!, .foregroundColor: Colors.LIGHT_GRAY])
-			string.append(attributedInfo)
-		}
-		
-		return string
 	}
 	
 	/**

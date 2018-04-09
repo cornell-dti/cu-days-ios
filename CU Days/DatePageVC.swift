@@ -151,7 +151,7 @@ class DatePageVC:UIPageViewController, UIPageViewControllerDataSource, UIPageVie
 			return
 		}
 		
-		if (FilterVC.selectedFilters.isEmpty && !FilterVC.requiredFilter)
+		if (FilterVC.collegeFilter == nil && FilterVC.typeFilter == nil)
 		{
 			//no filters on
 			filterButton?.backgroundColor = UIColor.clear

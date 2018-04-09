@@ -20,7 +20,6 @@ class FeedCell:UITableViewCell
     let eventEndTime = UILabel.newAutoLayout()
     let eventTitle = UILabel.newAutoLayout()
     let eventCaption = UILabel.newAutoLayout()
-	let requiredText = UITextField.newAutoLayout()
     
     var event:Event?
 	
@@ -38,7 +37,7 @@ class FeedCell:UITableViewCell
 	/**
 		Sets up all subviews of the FeedCell.
 		|								|
-		| 	10:30 Move-in		(RQ)	|
+		| 	10:30 Move-in				|
 		| 	 4:00 RPCC					|
 		|								|
 	*/
@@ -53,7 +52,7 @@ class FeedCell:UITableViewCell
 		horizStack.alignment = .center
 		horizStack.spacing = Layout.MARGIN
 		horizStack.distribution = .fill
-		horizStack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: Layout.MARGIN, bottom: 0, right: 24))
+		horizStack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: Layout.MARGIN, bottom: 0, right: Layout.MARGIN))
 		
 		// 10:30 Event name    ~ View to hold time & event info
 		//  1:00 Event caption ~
@@ -101,19 +100,6 @@ class FeedCell:UITableViewCell
 		eventCaption.autoPinEdge(toSuperviewEdge: .right)
 		eventCaption.autoPinEdge(.left, to: .right, of: eventEndTime, withOffset: Layout.MARGIN)
 		eventCaption.autoPinEdge(.top, to: .top, of: eventEndTime)
-		
-		// ~ ~~~ (RQ)	"RQ" label
-		requiredText.textAlignment = .center
-		requiredText.textColor = UIColor.white
-		requiredText.backgroundColor = Colors.RED
-		requiredText.text = "RQ"
-		requiredText.font = UIFont(name: Font.DEMIBOLD, size: 14)
-		requiredText.isUserInteractionEnabled = false
-		requiredText.autoSetDimensions(to: CGSize(width: 32, height: 32))
-		requiredText.layer.cornerRadius = 16
-		requiredText.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-		requiredText.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-		horizStack.addArrangedSubview(requiredText)
 	}
 	
 	/**
@@ -128,6 +114,7 @@ class FeedCell:UITableViewCell
 		eventCaption.text = event.caption
 		eventStartTime.text = event.startTime.description
 		eventEndTime.text = event.endTime.description
-		requiredText.isHidden = !UserData.requiredForUser(event: event)
+		eventTitle.alpha = event.full ? 0.5 : 0.8
+		eventCaption.alpha = event.full ? 0.5 : 0.75
     }
 }

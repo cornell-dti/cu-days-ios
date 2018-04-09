@@ -19,13 +19,12 @@ class SettingsVC: UITableViewController
 	let remindersCell = UITableViewCell.newAutoLayout()
 	let notifyMeCell = UITableViewCell.newAutoLayout()
 	
-	let orientationPdf = UITableViewCell.newAutoLayout()
 	let campusMap = UITableViewCell.newAutoLayout()
-	let orientationWebsite = UITableViewCell.newAutoLayout()
-	let rescuerApp = UITableViewCell.newAutoLayout()
-	let URLS = ["http://ccengagement.cornell.edu/sites/ccengagement.cornell.edu/files/rnsp/documents/january_orientation_guide_2018.pdf", "https://www.cornell.edu/about/maps/cornell-campus-map-2015.pdf", "https://newstudents.cornell.edu/spring-2018/first-year/orientation", "itms-apps://itunes.apple.com/us/app/cornell-rescuer/id1209164387?mt=8"]
+	let schedule = UITableViewCell.newAutoLayout()
+	let dti = UITableViewCell.newAutoLayout()
+	let URLS = ["https://www.cornell.edu/about/maps/cornell-campus-map-2015.pdf", "https://schedule.cornelldays.cornell.edu", "http://cornelldti.org/"]
 	
-	lazy var tableSections = [(name:"Notifications", rows:[remindersCell, notifyMeCell]), (name:"Resources", rows:[orientationPdf, campusMap, orientationWebsite, rescuerApp])]
+	lazy var tableSections = [(name:"Notifications", rows:[remindersCell, notifyMeCell]), (name:"Resources", rows:[campusMap, schedule, dti])]
 	
     let remindersSwitch = UISwitch.newAutoLayout()
     let notifyMeOption = UILabel.newAutoLayout()
@@ -91,10 +90,9 @@ class SettingsVC: UITableViewController
 		notifyMeOption.text = ListPreference.NotifyTime.get().rawValue
 		
 		//Resources
-		orientationPdf.textLabel?.text = "Orientation PDF"
 		campusMap.textLabel?.text = "Campus Map"
-		orientationWebsite.textLabel?.text = "New Students Orientation Website"
-		rescuerApp.textLabel?.text = "Cornell Rescuer App"
+		schedule.textLabel?.text = "Official Schedule"
+		dti.textLabel?.text = "Cornell Design & Tech Initiative"
 	}
 	
     // MARK:- Actions

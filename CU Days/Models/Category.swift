@@ -19,6 +19,8 @@ struct Category:Hashable, Comparable, CoreDataObject, JSONObject
 	let pk:Int
 	let name:String
 	let description:String
+	let isCollege:Bool
+	
 	var hashValue: Int
 	{
 		return pk
@@ -31,12 +33,14 @@ struct Category:Hashable, Comparable, CoreDataObject, JSONObject
 			- pk: Unique positive ID given to each category starting from 1.
 			- name: For example, "College of Engineering".
 			- description: More information about a `Category`. Currently unused.
+			- isCollege: True if this is a college category, false if it's a type category.
 	*/
-	init(pk:Int, name:String, description:String)
+	init(pk:Int, name:String, description:String, isCollege:Bool)
 	{
 		self.pk = pk
 		self.name = name
 		self.description = description
+		self.isCollege = isCollege
 	}
 	/**
 		Creates a category from saved `CoreData`.
@@ -47,12 +51,14 @@ struct Category:Hashable, Comparable, CoreDataObject, JSONObject
 				pk => Int
 				category => String
 				description => String
+				isCollege => String
 	*/
 	init(_ obj: NSManagedObject)
 	{
-		self.pk = obj.value(forKeyPath: "pk") as! Int
-		self.name = obj.value(forKey: "name") as! String
-		self.description = obj.value(forKey: "categoryDescription") as! String
+		pk = obj.value(forKeyPath: "pk") as! Int
+		name = obj.value(forKey: "name") as! String
+		description = obj.value(forKey: "categoryDescription") as! String
+		isCollege = obj.value(forKey: "isCollege") as! Bool
 	}
 	/**
 		Creates a category object using data downloaded from the database.
@@ -61,17 +67,19 @@ struct Category:Hashable, Comparable, CoreDataObject, JSONObject
 				pk => Int
 				category => String
 				description => String
+				isCollege => String
 	*/
 	init?(jsonOptional: [String:Any]?)
 	{
 		guard let json = jsonOptional,
 			let pk = json["pk"] as? Int,
 			let name = json["category"] as? String,
-			let description = json["description"] as? String else {
+			let description = json["description"] as? String,
+			let isCollege = json["isCollege"] as? Bool else {
 				return nil
 		}
 		
-		self.init(pk:pk, name:name, description:description)
+		self.init(pk:pk, name:name, description:description, isCollege: isCollege)
 	}
 	/**
 		Sets this category to the `CoreData` context given; for saving categories.
@@ -89,6 +97,7 @@ struct Category:Hashable, Comparable, CoreDataObject, JSONObject
 		obj.setValue(pk, forKeyPath: "pk")
 		obj.setValue(name, forKeyPath: "name")
 		obj.setValue(description, forKeyPath: "categoryDescription")
+		obj.setValue(isCollege, forKey: "isCollege")
 		return obj
 	}
 }

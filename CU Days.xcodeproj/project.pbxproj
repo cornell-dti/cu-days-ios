@@ -10,14 +10,12 @@
 		068CF136207A6D770045C896 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068CF135207A6D770045C896 /* AppDelegate.swift */; };
 		068CF13D207A6D780045C896 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 068CF13C207A6D780045C896 /* Assets.xcassets */; };
 		068CF140207A6D780045C896 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 068CF13E207A6D780045C896 /* LaunchScreen.storyboard */; };
-		06F7FBB7207A716200FF03BB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06F7FBB6207A716200FF03BB /* MapKit.framework */; };
 		06F7FBDA207A72D500FF03BB /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBB8207A72D100FF03BB /* GradientView.swift */; };
 		06F7FBDB207A72D500FF03BB /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBB9207A72D100FF03BB /* SettingsVC.swift */; };
 		06F7FBDC207A72D500FF03BB /* DatePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBA207A72D100FF03BB /* DatePickerController.swift */; };
 		06F7FBDE207A72D500FF03BB /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBD207A72D100FF03BB /* SearchVC.swift */; };
 		06F7FBDF207A72D500FF03BB /* DateContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBE207A72D100FF03BB /* DateContainer.swift */; };
 		06F7FBE0207A72D500FF03BB /* HasPK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBBF207A72D100FF03BB /* HasPK.swift */; };
-		06F7FBE1207A72D500FF03BB /* InitialSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC0207A72D200FF03BB /* InitialSettingsVC.swift */; };
 		06F7FBE2207A72D500FF03BB /* FilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC1207A72D200FF03BB /* FilterVC.swift */; };
 		06F7FBE3207A72D500FF03BB /* PaddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC2207A72D200FF03BB /* PaddedLabel.swift */; };
 		06F7FBE4207A72D500FF03BB /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBC3207A72D200FF03BB /* FeedCell.swift */; };
@@ -36,11 +34,9 @@
 		06F7FBF1207A72D500FF03BB /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD0207A72D300FF03BB /* TabBarVC.swift */; };
 		06F7FBF2207A72D500FF03BB /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD1207A72D300FF03BB /* LocalNotifications.swift */; };
 		06F7FBF3207A72D500FF03BB /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD2207A72D300FF03BB /* FeedVC.swift */; };
-		06F7FBF4207A72D500FF03BB /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD3207A72D300FF03BB /* Student.swift */; };
 		06F7FBF5207A72D500FF03BB /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD4207A72D300FF03BB /* Event.swift */; };
 		06F7FBF6207A72D500FF03BB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD5207A72D400FF03BB /* Constants.swift */; };
 		06F7FBF8207A72D500FF03BB /* DetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD7207A72D400FF03BB /* DetailsVC.swift */; };
-		06F7FBF9207A72D500FF03BB /* Colleges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD8207A72D400FF03BB /* Colleges.swift */; };
 		06F7FBFF207A761D00FF03BB /* CU-Days.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBFD207A761D00FF03BB /* CU-Days.xcdatamodeld */; };
 		869C2CD508B229A287D6DDDA /* Pods_CU_Days.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */; };
 /* End PBXBuildFile section */
@@ -58,7 +54,6 @@
 		06F7FBBD207A72D100FF03BB /* SearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		06F7FBBE207A72D100FF03BB /* DateContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateContainer.swift; sourceTree = "<group>"; };
 		06F7FBBF207A72D100FF03BB /* HasPK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasPK.swift; sourceTree = "<group>"; };
-		06F7FBC0207A72D200FF03BB /* InitialSettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSettingsVC.swift; sourceTree = "<group>"; };
 		06F7FBC1207A72D200FF03BB /* FilterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
 		06F7FBC2207A72D200FF03BB /* PaddedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddedLabel.swift; sourceTree = "<group>"; };
 		06F7FBC3207A72D200FF03BB /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
@@ -77,11 +72,9 @@
 		06F7FBD0207A72D300FF03BB /* TabBarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
 		06F7FBD1207A72D300FF03BB /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
 		06F7FBD2207A72D300FF03BB /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
-		06F7FBD3207A72D300FF03BB /* Student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
 		06F7FBD4207A72D300FF03BB /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		06F7FBD5207A72D400FF03BB /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		06F7FBD7207A72D400FF03BB /* DetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsVC.swift; sourceTree = "<group>"; };
-		06F7FBD8207A72D400FF03BB /* Colleges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colleges.swift; sourceTree = "<group>"; };
 		06F7FBFE207A761D00FF03BB /* CU-Days.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CU-Days.xcdatamodel"; sourceTree = "<group>"; };
 		5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CU_Days.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CA1271BBA3016612043C827 /* Pods-CU Days.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CU Days.release.xcconfig"; path = "Pods/Target Support Files/Pods-CU Days/Pods-CU Days.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,7 +86,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06F7FBB7207A716200FF03BB /* MapKit.framework in Frameworks */,
 				869C2CD508B229A287D6DDDA /* Pods_CU_Days.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,7 +123,6 @@
 				06F7FBC3207A72D200FF03BB /* FeedCell.swift */,
 				06F7FBD2207A72D300FF03BB /* FeedVC.swift */,
 				06F7FBC1207A72D200FF03BB /* FilterVC.swift */,
-				06F7FBC0207A72D200FF03BB /* InitialSettingsVC.swift */,
 				06F7FBCF207A72D300FF03BB /* ScheduleVC.swift */,
 				06F7FBBD207A72D100FF03BB /* SearchVC.swift */,
 				06F7FBB9207A72D100FF03BB /* SettingsVC.swift */,
@@ -151,7 +142,6 @@
 			children = (
 				06F7FBD4207A72D300FF03BB /* Event.swift */,
 				06F7FBC7207A72D200FF03BB /* Category.swift */,
-				06F7FBD8207A72D400FF03BB /* Colleges.swift */,
 				06F7FBC8207A72D200FF03BB /* CoreData.swift */,
 				06F7FBBE207A72D100FF03BB /* DateContainer.swift */,
 				06F7FBC9207A72D200FF03BB /* EmptyStateTableVC.swift */,
@@ -159,7 +149,6 @@
 				06F7FBBF207A72D100FF03BB /* HasPK.swift */,
 				06F7FBCD207A72D300FF03BB /* JSONObject.swift */,
 				06F7FBC2207A72D200FF03BB /* PaddedLabel.swift */,
-				06F7FBD3207A72D300FF03BB /* Student.swift */,
 				06F7FBC5207A72D200FF03BB /* Time.swift */,
 				06F7FBC4207A72D200FF03BB /* UserPreferences.swift */,
 			);
@@ -207,6 +196,7 @@
 				068CF12F207A6D760045C896 /* Frameworks */,
 				068CF130207A6D760045C896 /* Resources */,
 				CE1557C2BA4234812FBB156A /* [CP] Embed Pods Frameworks */,
+				784616304C7A59BAF39C0C41 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -234,7 +224,7 @@
 								enabled = 1;
 							};
 							com.apple.Maps.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -271,6 +261,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		784616304C7A59BAF39C0C41 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CU Days/Pods-CU Days-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CU Days/Pods-CU Days-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A6771949A7EC054DE8623331 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -340,12 +350,9 @@
 				06F7FBEC207A72D500FF03BB /* Extensions.swift in Sources */,
 				06F7FBDA207A72D500FF03BB /* GradientView.swift in Sources */,
 				06F7FBE8207A72D500FF03BB /* Category.swift in Sources */,
-				06F7FBF9207A72D500FF03BB /* Colleges.swift in Sources */,
 				06F7FBEF207A72D500FF03BB /* UserData.swift in Sources */,
 				06F7FBDE207A72D500FF03BB /* SearchVC.swift in Sources */,
-				06F7FBE1207A72D500FF03BB /* InitialSettingsVC.swift in Sources */,
 				06F7FBE6207A72D500FF03BB /* Time.swift in Sources */,
-				06F7FBF4207A72D500FF03BB /* Student.swift in Sources */,
 				06F7FBE2207A72D500FF03BB /* FilterVC.swift in Sources */,
 				06F7FBDF207A72D500FF03BB /* DateContainer.swift in Sources */,
 			);

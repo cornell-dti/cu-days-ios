@@ -7,19 +7,23 @@
 //
 
 import UIKit
-import MapKit
+import GoogleMaps
+import GooglePlaces
 import PKHUD
 
 /**
 	Displays a user-selected event.
 
 	`event`: The event displayed to the user.
+	`placeName`: Name of the place in `event.placeId`
+	`placeAddress`: Address of the place in `event.placeId`
+
 	`changed`: Indicates if the user selected/deselected the event. When this view is exiting, if this is true, then we must notify listeners for event reloads.
 	`didLayout`: True if layout of subviews was completed. Used to ensure layout is only done once.
 	`didSetListeners`: True if listeners for subviews were set. Used to ensure listeners are only set once.
 	`configure(event)`: Method to configure this VC to display the given event. Must be called before presenting to the user.
 */
-class DetailsVC: UIViewController, MKMapViewDelegate
+class DetailsVC: UIViewController
 {
 	let scrollView = UIScrollView.newAutoLayout()
 	let scrollContent = UIStackView.newAutoLayout()
@@ -31,22 +35,24 @@ class DetailsVC: UIViewController, MKMapViewDelegate
     let eventLocation = UILabel.newAutoLayout()
 	let addButton = UILabel.newAutoLayout()
 	
-	let requiredContainer = UIView.newAutoLayout()
-	let requiredDivider = UIView.newAutoLayout()
-	let requiredLabel = UITextField.newAutoLayout()
-	let requiredDescription = UILabel.newAutoLayout()
+	let fullContainer = UIView.newAutoLayout()
+	let fullDivider = UIView.newAutoLayout()
+	let fullLabel = UITextField.newAutoLayout()
+	let fullDescription = UILabel.newAutoLayout()
 	
     let eventDescription = UILabel.newAutoLayout()
 	let moreButton = UILabel.newAutoLayout()
 	let moreButtonGradient = GradientView.newAutoLayout()
 	let additional = UILabel.newAutoLayout()
 	
-	let map = MKMapView.newAutoLayout()
+	let map = GMSMapView.newAutoLayout()
 	let directionsButton = UIButton(type: .system)
 	
-	let MAP_ZOOM = 0.001
 	let NUM_LINES_IN_CONDENSED_DESCRIPTION = 3
+	let placesClient = GMSPlacesClient.shared()
     var event: Event?
+	var placeName: String?
+	var placeAddress: String?
     var changed = false
 	var didLayout = false
 	var didSetListeners = false
@@ -184,31 +190,33 @@ class DetailsVC: UIViewController, MKMapViewDelegate
 		addButton.font = UIFont(name: Font.DEMIBOLD, size: 16)
 		
 		
-		//requiredContainer will hold requiredLabel, requiredDescription
+		//fullContainer will hold fullLabel, fullDescription
 		//
-		// (RQ) Required for all students
+		// (Full) The event is full.
 		//
-		add(divider: requiredDivider, to: marginedContent)
-		marginedContent.addArrangedSubview(requiredContainer)
-		requiredContainer.autoSetDimension(.height, toSize: 40)
+		add(divider: fullDivider, to: marginedContent)
+		marginedContent.addArrangedSubview(fullContainer)
+		fullContainer.autoSetDimension(.height, toSize: 40)
 		
-		requiredContainer.addSubview(requiredLabel)
-		requiredLabel.autoPinEdge(toSuperviewEdge: .left)
-		requiredLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
-		requiredLabel.autoSetDimensions(to: CGSize(width: 32, height: 32))
-		requiredLabel.isUserInteractionEnabled = false
-		requiredLabel.textAlignment = .center
-		requiredLabel.textColor = UIColor.white
-		requiredLabel.text = "RQ"
-		requiredLabel.font = UIFont(name: Font.DEMIBOLD, size: 14)
-		requiredLabel.layer.cornerRadius = 16
+		fullContainer.addSubview(fullLabel)
+		fullLabel.autoPinEdge(toSuperviewEdge: .left)
+		fullLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
+		fullLabel.autoSetDimensions(to: CGSize(width: 48, height: 32))
+		fullLabel.isUserInteractionEnabled = false
+		fullLabel.textAlignment = .center
+		fullLabel.textColor = UIColor.white
+		fullLabel.text = "Full"
+		fullLabel.font = UIFont(name: Font.DEMIBOLD, size: 14)
+		fullLabel.layer.cornerRadius = 16
+		fullLabel.backgroundColor = Colors.RED
 		
-		requiredContainer.addSubview(requiredDescription)
-		requiredDescription.autoPinEdge(toSuperviewEdge: .right)
-		requiredDescription.autoPinEdge(.left, to: .right, of: requiredLabel, withOffset: Layout.MARGIN)
-		requiredDescription.autoAlignAxis(toSuperviewAxis: .horizontal)
-		requiredDescription.font = UIFont(name: Font.MEDIUM, size: 14)
-		requiredDescription.numberOfLines = 0
+		fullContainer.addSubview(fullDescription)
+		fullDescription.autoPinEdge(toSuperviewEdge: .right)
+		fullDescription.autoPinEdge(.left, to: .right, of: fullLabel, withOffset: Layout.MARGIN)
+		fullDescription.autoAlignAxis(toSuperviewAxis: .horizontal)
+		fullDescription.font = UIFont(name: Font.MEDIUM, size: 14)
+		fullDescription.numberOfLines = 0
+		fullDescription.text = "The event is full."
 		
 		
 		//detailsContainer will hold eventDescription, moreButton, and moreButtonMask
@@ -313,9 +321,9 @@ class DetailsVC: UIViewController, MKMapViewDelegate
 		eventTime.text = "\(event.startTime) - \(event.endTime)"
 		
         refreshButton(added: UserData.selectedEventsContains(event))
-		Internet.getImageFor(event, imageView: eventImage)
+		Internet.getImageFor(event.imagePk, imageView: eventImage)
 		configureMap(event:event)
-		configureRequired(event: event)
+		configureFull(event: event)
 		configureDescription(event: event)
     }
 	/**
@@ -344,7 +352,7 @@ class DetailsVC: UIViewController, MKMapViewDelegate
 		
 		if (!event.additional.isEmpty)
 		{
-			additional.attributedText = event.attributedAdditional()
+			additional.text = event.additional
 			additional.isHidden = false
 		}
 		else
@@ -356,33 +364,10 @@ class DetailsVC: UIViewController, MKMapViewDelegate
 		Set up the required label and description depending on whether the event is required, and for whom.
 		- parameter event: Same as the global variable, but not nil.
 	*/
-	private func configureRequired(event:Event)
+	private func configureFull(event:Event)
 	{
-		if (!(event.required || event.categoryRequired))
-		{
-			requiredContainer.isHidden = true
-			requiredDivider.isHidden = true
-		}
-		else
-		{
-			requiredContainer.isHidden = false
-			requiredDivider.isHidden = false
-			
-			//change color of RQ label based on whether or not it's required for this user
-			requiredLabel.backgroundColor = UserData.requiredForUser(event: event) ? Colors.RED : Colors.GRAY
-			
-			if (event.required)
-			{
-				requiredDescription.text = "Required for All Students"
-			}
-			else	//category required
-			{
-				if let category = UserData.categories[event.category]
-				{
-					requiredDescription.text = "Required for \(category.name) Students"
-				}
-			}
-		}
+		fullContainer.isHidden = !event.full
+		fullDivider.isHidden = !event.full
 	}
 	/**
 		Set up the map such that it displays the location of the event with a marker.
@@ -390,19 +375,18 @@ class DetailsVC: UIViewController, MKMapViewDelegate
 	*/
 	private func configureMap(event:Event)
 	{
-		map.delegate = self
-		
-		//set center & zoom
-		let center = CLLocationCoordinate2DMake(event.latitude, event.longitude)
-		let span = MKCoordinateSpanMake(MAP_ZOOM, MAP_ZOOM)
-		let region = MKCoordinateRegionMake(center, span)
-		map.setRegion(region, animated: false)
-		
-		//set marker
-		let marker = MKPointAnnotation()
-		marker.title = event.caption
-		marker.coordinate = center
-		map.addAnnotation(marker)
+		placesClient.lookUpPlaceID(event.placeId, callback: {
+			result, error in
+			guard result != nil else {
+				return
+			}
+			
+			self.placeName = result?.name
+			self.placeAddress = result?.formattedAddress
+			
+			self.map.camera(for: result!.viewport!, insets: .zero)
+			self.map.selectedMarker = GMSMarker(position: result!.coordinate)
+		})
 	}
 	/**
 		Handle user selection of map's direction button. Opens Apple Maps and starts navigation.
@@ -410,10 +394,13 @@ class DetailsVC: UIViewController, MKMapViewDelegate
 	*/
 	@objc func onDirectionsButtonClick(_ sender: UIButton)
 	{
-		let center = CLLocationCoordinate2DMake(event!.latitude, event!.longitude)
-		let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: center))
-		mapItem.name = event!.caption
-		mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeWalking])
+		guard placeName != nil && placeAddress != nil else {
+			print("Directions clicked, but place not found by Google")
+			return
+		}
+		
+		let url = URL(string: "geo:0,0?q=\(placeName!), \(placeAddress!)")!
+		UIApplication.shared.open(url, options: [:], completionHandler: nil)
 	}
 	/**
 		Handle user selection of event detail's more button. Expands event description.
