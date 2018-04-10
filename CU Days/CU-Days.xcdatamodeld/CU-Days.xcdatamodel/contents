@@ -1,30 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CategoryEntity" representedClassName="CategoryEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="categoryDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="isCollege" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="pk" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-    </entity>
-    <entity name="EventEntity" representedClassName="EventEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="additional" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="collegeCategory" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="endTimeHr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="endTimeMin" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="eventDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="full" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="imagePk" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="pk" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="placeId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="startTimeHr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="startTimeMin" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="typeCategory" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-    </entity>
-    <elements>
-        <element name="CategoryEntity" positionX="-54" positionY="99" width="128" height="105"/>
-        <element name="EventEntity" positionX="-63" positionY="-18" width="128" height="270"/>
-    </elements>
+    <elements/>
 </model>

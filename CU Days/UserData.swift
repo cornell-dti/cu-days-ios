@@ -25,6 +25,9 @@ class UserData
     //UserDefaults keys
     static let addedPKsName = "AddedPKs" //KeyPath used for accessing added PKs
 	static let versionName = "version" //KeyPath used for accessing local version to compare with database
+	static let eventsName = "events" //KeyPath where array of events are saved
+	static let categoriesName = "categories" //KeyPath were array of categories are saved
+	static let defaults = UserDefaults.standard
     
     //Events
 	static var allEvents = [Date: [Int:Event]]()
@@ -43,6 +46,7 @@ class UserData
 	//Categories
 	static var collegeCategories = [Int:Category]()
 	static var typeCategories = [Int:Category]()
+	
 	
     private init(){}
 	
@@ -92,21 +96,9 @@ class UserData
 	{
 		initDates()
 		
-		//load from CoreData
-		let eventData = fetchFromCoreData(Event.self)
-		eventData.forEach({appendToAllEvents(Event($0))})
-		
-		let categoryData = fetchFromCoreData(Category.self)
-		for datum in categoryData
-		{
-			let category = Category(datum)
-			if (category.isCollege) {
-				collegeCategories[category.pk] = category
-			}
-			else {
-				typeCategories[category.pk] = category
-			}
-		}
+		//load from disk
+		getEvents()
+		getCategories()
 		
 		let addedPKs = getAddedPKs()
 		addedPKs.forEach({pk in
@@ -122,18 +114,14 @@ class UserData
 			
 			//update categories
 			changedCategories.forEach({updateCategory($0)})
-			deletedCategoryPks.forEach({removeFromCoreData(entityName: Category.entityName, pk: $0)})
 			deletedCategoryPks.forEach({pk in
 				collegeCategories.removeValue(forKey: pk)
 				typeCategories.removeValue(forKey: pk)
 			})
+			saveCategories()
 			
 			//update events
 			changedEvents.forEach({updateEvent($0)})
-			deletedEventPks.forEach({
-				eventPk in
-				UserData.removeFromCoreData(entityName: Event.entityName, pk: eventPk)
-			})
 			for date in DATES
 			{
 				deletedEventPks.forEach({pk in
@@ -141,6 +129,7 @@ class UserData
 					selectedEvents[date]?.removeValue(forKey: pk)
 				})
 			}
+			saveEvents()
 			
 			//all version updates have been processed. Now, load events that the user has selected into selectedEvents (again).
 			addedPKs.forEach({pk in
@@ -227,10 +216,13 @@ class UserData
 	@discardableResult
     static func removeFromSelectedEvents(_ event: Event) -> Bool
 	{
-        if selectedEvents[event.date] != nil
+		for day in DATES
 		{
-            return selectedEvents[event.date]!.removeValue(forKey: event.pk) != nil
-        }
+			let removed = selectedEvents[day]!.removeValue(forKey: event.pk) != nil
+			if (removed) {
+				return true
+			}
+		}
 		return false
     }
 	/**
@@ -241,9 +233,12 @@ class UserData
 	@discardableResult
 	static func removeFromAllEvents(_ event:Event) -> Bool
 	{
-		if allEvents[event.date] != nil
+		for day in DATES
 		{
-			return allEvents[event.date]!.removeValue(forKey: event.pk) != nil
+			let removed = allEvents[day]!.removeValue(forKey: event.pk) != nil
+			if (removed) {
+				return true
+			}
 		}
 		return false
 	}
@@ -268,20 +263,15 @@ class UserData
 	/**
 		Updates an event that might've been already on disk with one from the database. Performs the following actions:
 	
-		1. Adds new event.
-		2. Removes old event from `CoreData` (again, using the `pk`. Look at `removeFromCoreData()` for details).
-		3. Saves new event to `CoreData`.
-		4. Attempt to remove old event from selected events. If we did remove something, that means the old event was selected, so we should then select the new updated event. `removeFromSelected()` also matches event by equality, which is based on `pk`.
+		1. Adds new event, removing its old copy.
+		2. Attempt to remove old event from selected events. If we did remove something, that means the old event was selected, so we should then select the new updated event. `removeFromSelected()` also matches event by equality, which is based on `pk`.
 	
-		- note: Pictures CANNOT be updated with this method (for now). To update an event's picture, the best way would be to delete the event and add a new one (both done on the database), with a different pk.
 		- parameter event: Updated event. Should have same `pk` as old event, if old event exists.
 	*/
 	static func updateEvent(_ event:Event)
 	{
 		removeFromAllEvents(event)
 		appendToAllEvents(event)
-		removeFromCoreData(entityName: Event.entityName, pk: event.pk)
-		saveToCoreData(event)
 		
 		//if the event was selected, make sure it still is. Otherwise, we don't care.
 		if (removeFromSelectedEvents(event))
@@ -290,69 +280,17 @@ class UserData
 		}
 	}
 	/**
-		Updates a category that might've been already on disk with one from the database. Performs the following actions:
-	
-		1. Remove the old category from `CoreData`.
-		2. Adds new category.
-		3. Saves new category to `CoreData`.
-		
+		Updates a category that might've been already on disk with one from the database.
 		- parameter category: Updated category. Should have same `pk` as old category, if old category exists.
 	*/
 	static func updateCategory(_ category:Category)
 	{
-		removeFromCoreData(entityName: Category.entityName, pk: category.pk)
 		if (category.isCollege) {
 			collegeCategories[category.pk] = category
 		}
 		else {
 			typeCategories[category.pk] = category
 		}
-		saveToCoreData(category)
-	}
-	
-	// MARK:- Core Data interactions
-	
-	/**
-		Saves the given object to `CoreData` asynchronously.
-		- parameter object: Object to save. Should implement `CoreDataObject` protocol.
-	*/
-	static func saveToCoreData(_ object:CoreDataObject)
-	{
-		CoreData.persistentContainer.performBackgroundTask(
-		{
-			(context) in
-			let entity = NSEntityDescription.entity(forEntityName: type(of: object).entityName, in: context)!
-			object.saveToCoreData(entity: entity, context: context)
-			try? context.save()
-		})
-	}
-	/**
-		Removes an object with the `pk` from `CoreData`.
-		- parameters:
- 			- entityName: Type of object.
-			- pk: Unique id of object.
-	*/
-	static func removeFromCoreData(entityName:String, pk:Int)
-	{
-		CoreData.persistentContainer.performBackgroundTask(
-		{
-			(context) in
-			let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-			fetchRequest.predicate = NSPredicate(format: "pk = %@", argumentArray: [pk])
-			let fetchedResults = try? context.fetch(fetchRequest)
-			fetchedResults?.forEach({context.delete($0 as! NSManagedObject)})
-		})
-	}
-	/**
-		Returns an array of `NSManagedObjects` from `CoreData` of the given type.
-		- parameter type: The entity type of the objects you want to read.
-		- returns: Array of `NSManagedObjects` of the entity type given.
-	*/
-	private static func fetchFromCoreData(_ type:CoreDataObject.Type) -> [NSManagedObject]
-	{
-		let managedContext = CoreData.persistentContainer.viewContext
-		let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: type.entityName)
-		return try! managedContext.fetch(fetchRequest)
 	}
 	
 	// MARK:- Image saving, reading, and deletion.
@@ -401,7 +339,6 @@ class UserData
 	*/
 	static func getAddedPKs() -> [Int]
 	{
-		let defaults = UserDefaults.standard
 		return defaults.object(forKey: addedPKsName) as? [Int] ?? [Int]()
 	}
 	/**
@@ -409,7 +346,6 @@ class UserData
 	*/
     static func saveAddedPKs()
 	{
-        let defaults = UserDefaults.standard
         let addedPks = selectedEvents.values.flatMap({$0.keys})
         defaults.set(addedPks, forKey: addedPKsName)
     }
@@ -420,13 +356,58 @@ class UserData
 		get
 		{
 			//if version was not set, defaults.integer returns 0, which is what we want
-			let defaults = UserDefaults.standard
 			return defaults.integer(forKey: versionName)
 		}
 		set
 		{
-			let defaults = UserDefaults.standard
 			defaults.set(newValue, forKey: versionName)
 		}
+	}
+	/**
+		Save events to disk.
+	*/
+	static func saveEvents()
+	{
+		let events = allEvents.values.flatMap({$0.values}).map({$0.toString()})
+		defaults.set(events, forKey: eventsName)
+	}
+	/**
+		Retrieve saved events from disk in `allEvents`.
+	*/
+	static func getEvents()
+	{
+		guard let events = defaults.array(forKey: eventsName) as? [String] else {
+			return
+		}
+		
+		events.compactMap({Event.fromString(str: $0)}).forEach({appendToAllEvents($0)})
+	}
+	/**
+		Save categories to disk.
+	*/
+	static func saveCategories()
+	{
+		let categories = collegeCategories.values.map({$0.toString()}) + typeCategories.values.map({$0.toString()})
+		defaults.set(categories, forKey: categoriesName)
+	}
+	/**
+		Retrieve saved categories from disk.
+	*/
+	static func getCategories()
+	{
+		guard let categories = defaults.array(forKey: categoriesName) as? [String] else {
+			return
+		}
+		
+		categories.forEach({
+			str in
+			let category = Category.fromString(str: str)!
+			if (category.isCollege) {
+				collegeCategories[category.pk] = category
+			}
+			else {
+				typeCategories[category.pk] = category
+			}
+		})
 	}
 }

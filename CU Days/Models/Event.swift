@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 /**
 	Data-type that holds all information about an event. Designed to be immutable. This will be downloaded from the database via methods in `Internet`, where new events will be compared with saved ones.
@@ -25,9 +24,8 @@ import CoreData
 
 	- Note: see `Category`
 */
-struct Event:Hashable, Comparable, CoreDataObject, JSONObject
+struct Event:Hashable, Comparable, JSONObject
 {
-	static let entityName = "EventEntity"
     let title: String
     let caption: String
     let description: String
@@ -79,45 +77,6 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
 		self.full = full
 		self.imagePk = imagePk
 		self.additional = additional
-    }
-	/**
-		Creates an event from saved `CoreData`.
-		
-		- important: Should have value fields synced with `CU-Days.xcdatamodeld` and function `saveToCoreData`.
-		
-		- parameter obj: Object retrieved from `CoreData`. Expects fields:
-				title  => String
-				caption => String
-				pk => int
-				eventDescription => String
-				collegeCategory => int
-				typeCategory => int
-				startTimeHr => int
-				startTimeMin => int
-				endTimeHr => int
-				endTimeMin => int
-				required => bool
-				date => Date
-				placeId => String
-				full => boolean
-				imagePk => int
-				additional => String
-	*/
-    init(_ obj: NSManagedObject)
-	{
-        title = obj.value(forKeyPath: "title") as! String
-        caption = obj.value(forKeyPath: "caption") as! String
-        description = obj.value(forKeyPath: "eventDescription") as! String
-        collegeCategory = obj.value(forKey: "collegeCategory") as! Int
-		typeCategory = obj.value(forKey: "typeCategory") as! Int
-        startTime = Time(hour: obj.value(forKeyPath: "startTimeHr") as! Int, minute: obj.value(forKeyPath: "startTimeMin") as! Int)
-        endTime = Time(hour: obj.value(forKeyPath: "endTimeHr") as! Int, minute: obj.value(forKeyPath: "endTimeMin") as! Int)
-        date = obj.value(forKeyPath: "date") as! Date
-        pk = obj.value(forKeyPath: "pk") as! Int
-		placeId = obj.value(forKey: "placeId") as! String
-		full = obj.value(forKey: "full") as! Bool
-		imagePk = obj.value(forKey: "imagePk") as! Int
-		additional = obj.value(forKey: "additional") as! String
     }
 	/**
 		Creates an event object using data downloaded from the database.
@@ -178,34 +137,59 @@ struct Event:Hashable, Comparable, CoreDataObject, JSONObject
         self.startTime = Time.fromString(startTime)
         self.endTime = Time.fromString(endTime)
     }
+	
 	/**
-		Sets this event to the `CoreData` context given; for saving events.
-		
-		- important: Should have value fields synced with `CU-Days.xcdatamodeld` and function `init(obj)`.
-		
-		- parameters:
-			- entity: Core data magic.
-			- context: Core data magic.
+		Convert this event to a string to save to disk.
+		- returns: String representation of this object.
 	*/
-	func saveToCoreData(entity: NSEntityDescription, context: NSManagedObjectContext) -> NSManagedObject
+	func toString() -> String
 	{
-		let obj = NSManagedObject(entity: entity, insertInto: context)
-		obj.setValue(title, forKeyPath: "title")
-		obj.setValue(caption, forKeyPath: "caption")
-		obj.setValue(description, forKeyPath: "eventDescription")
-		obj.setValue(pk, forKeyPath: "pk")
-		obj.setValue(startTime.hour, forKeyPath: "startTimeHr")
-		obj.setValue(startTime.minute, forKeyPath: "startTimeMin")
-		obj.setValue(endTime.hour, forKeyPath: "endTimeHr")
-		obj.setValue(endTime.minute, forKeyPath: "endTimeMin")
-		obj.setValue(full, forKeyPath: "full")
-		obj.setValue(date, forKeyPath: "date")
-		obj.setValue(collegeCategory, forKey: "collegeCategory")
-		obj.setValue(typeCategory, forKey: "typeCategory")
-		obj.setValue(placeId, forKey: "placeId")
-		obj.setValue(imagePk, forKey: "imagePk")
-		obj.setValue(additional, forKey: "additional")
-		return obj
+		let year = UserData.userCalendar.component(.year, from: date)
+		let month = UserData.userCalendar.component(.month, from: date)
+		let day = UserData.userCalendar.component(.day, from: date)
+		return "\(title)|\(caption)|\(description)|\(pk)|\(startTime.hour)|\(startTime.minute)|\(endTime.hour)|\(endTime.minute)|\(full)|\(year)|\(month)|\(day)|\(collegeCategory)|\(typeCategory)|\(placeId)|\(imagePk)|\(additional)"
+	}
+	
+	/**
+		Create an event object from its string representation.
+		- parameter str: String representation of an event.
+		- returns: Event object.
+	*/
+	static func fromString(str:String) -> Event?
+	{
+		let parts = str.components(separatedBy: "|")
+		guard parts.count == 17,
+			let pk = Int(parts[3]),
+			let startHour = Int(parts[4]),
+			let startMinute = Int(parts[5]),
+			let endHour = Int(parts[6]),
+			let endMinute = Int(parts[7]),
+			let full = Bool(parts[8]),
+			let year = Int(parts[9]),
+			let month = Int(parts[10]),
+			let day = Int(parts[11]),
+			let collegeCategory = Int(parts[12]),
+			let typeCategory = Int(parts[13]),
+			let imagePk = Int(parts[15]) else {
+			print("invalid event string: \(str)")
+			return nil
+		}
+		
+		let title = parts[0]
+		let caption = parts[1]
+		let description = parts[2]
+		let placeId = parts[14]
+		let additional = parts[16]
+		
+		let start = Time(hour: startHour, minute: startMinute)
+		let end = Time(hour: endHour, minute: endMinute)
+		var dateComponents = DateComponents()
+		dateComponents.year = year
+		dateComponents.month = month
+		dateComponents.day = day
+		let date = UserData.userCalendar.date(from: dateComponents)!
+		
+		return Event(title: title, caption: caption, collegeCategory: collegeCategory, typeCategory: typeCategory, pk: pk, start: start, end: end, date: date, description: description, placeId: placeId, full: full, imagePk: imagePk, additional: additional)
 	}
 	
 	/**
@@ -255,5 +239,5 @@ func < (lhs:Event, rhs:Event) -> Bool
 	{
 		return true
 	}
-	return lhs.startTime.hour < rhs.startTime.hour
+	return lhs.startTime < rhs.startTime
 }
