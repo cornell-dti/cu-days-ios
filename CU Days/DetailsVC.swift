@@ -15,8 +15,7 @@ import PKHUD
 	Displays a user-selected event.
 
 	`event`: The event displayed to the user.
-	`placeName`: Name of the place in `event.placeId`
-	`placeAddress`: Address of the place in `event.placeId`
+	`placeLatLng`: Latitude and longitude of the place in `event.placeId`.
 
 	`changed`: Indicates if the user selected/deselected the event. When this view is exiting, if this is true, then we must notify listeners for event reloads.
 	`didLayout`: True if layout of subviews was completed. Used to ensure layout is only done once.
@@ -46,13 +45,13 @@ class DetailsVC: UIViewController
 	let additional = UILabel.newAutoLayout()
 	
 	let map = GMSMapView.newAutoLayout()
+	var mapMarker:GMSMarker?
 	let directionsButton = UIButton(type: .system)
 	
 	let NUM_LINES_IN_CONDENSED_DESCRIPTION = 3
 	let placesClient = GMSPlacesClient.shared()
     var event: Event?
-	var placeName: String?
-	var placeAddress: String?
+	var placeLatLng: CLLocationCoordinate2D?
     var changed = false
 	var didLayout = false
 	var didSetListeners = false
@@ -205,7 +204,7 @@ class DetailsVC: UIViewController
 		fullLabel.isUserInteractionEnabled = false
 		fullLabel.textAlignment = .center
 		fullLabel.textColor = UIColor.white
-		fullLabel.text = "Full"
+		fullLabel.text = "FULL"
 		fullLabel.font = UIFont(name: Font.DEMIBOLD, size: 14)
 		fullLabel.layer.cornerRadius = 16
 		fullLabel.backgroundColor = Colors.RED
@@ -375,17 +374,18 @@ class DetailsVC: UIViewController
 	*/
 	private func configureMap(event:Event)
 	{
+		mapMarker?.map = nil	//remove prev marker
 		placesClient.lookUpPlaceID(event.placeId, callback: {
 			result, error in
 			guard result != nil else {
 				return
 			}
 			
-			self.placeName = result?.name
-			self.placeAddress = result?.formattedAddress
-			
-			self.map.camera(for: result!.viewport!, insets: .zero)
-			self.map.selectedMarker = GMSMarker(position: result!.coordinate)
+			self.placeLatLng = result?.coordinate
+			self.map.moveCamera(GMSCameraUpdate.fit(result!.viewport!))
+			self.mapMarker = GMSMarker(position: result!.coordinate)
+			self.mapMarker!.map = self.map
+			self.map.selectedMarker = self.mapMarker
 		})
 	}
 	/**
@@ -394,13 +394,21 @@ class DetailsVC: UIViewController
 	*/
 	@objc func onDirectionsButtonClick(_ sender: UIButton)
 	{
-		guard placeName != nil && placeAddress != nil else {
+		guard placeLatLng != nil else {
 			print("Directions clicked, but place not found by Google")
 			return
 		}
 		
-		let url = URL(string: "geo:0,0?q=\(placeName!), \(placeAddress!)")!
-		UIApplication.shared.open(url, options: [:], completionHandler: nil)
+		if (UIApplication.shared.canOpenURL(URL(string: "comgooglemaps://")!))
+		{
+			let googleMapsUrl = URL(string: "comgooglemaps://center=?q=\(placeLatLng!.latitude),\(placeLatLng!.longitude)")!
+			UIApplication.shared.open(googleMapsUrl, options: [:], completionHandler: nil)
+		}
+		else
+		{
+			let appleMapsUrl = URL(string: "http://maps.apple.com/?q=\(placeLatLng!.latitude),\(placeLatLng!.longitude)")!
+			UIApplication.shared.open(appleMapsUrl, options: [:], completionHandler: nil)
+		}
 	}
 	/**
 		Handle user selection of event detail's more button. Expands event description.

@@ -90,7 +90,7 @@ class Internet
 		}
 		else
 		{
-			imageFrom("\(DATABASE)event/\(imagePk)/image", imageView: imageView, imagePk: imagePk)
+			imageFrom("\(DATABASE)image/\(imagePk)", imageView: imageView, imagePk: imagePk)
 		}
     }
 	/**

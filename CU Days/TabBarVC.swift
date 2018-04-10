@@ -26,5 +26,6 @@ class TabBarVC:UITabBarController
 		
 		viewControllers = [schedulePageVC, feedPageVC, searchVC, settingsVC]
 		tabBar.tintColor = Colors.BRIGHT_RED
+		selectedIndex = 1	//select Feed by default
 	}
 }
