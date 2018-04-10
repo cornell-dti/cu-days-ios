@@ -132,12 +132,12 @@ class FilterVC: UITableViewController
 		
 		return events.filter({
 			event in
-			if (FilterVC.collegeFilter != nil && FilterVC.collegeFilter!.pk == event.collegeCategory) {
-				return true
+			if (FilterVC.collegeFilter == nil || FilterVC.collegeFilter!.pk == event.collegeCategory) {
+				if (FilterVC.typeFilter == nil || FilterVC.typeFilter!.pk == event.typeCategory) {
+					return true
+				}
 			}
-			if (FilterVC.typeFilter != nil && FilterVC.typeFilter!.pk == event.typeCategory) {
-				return true
-			}
+			
 			return false
 		})
 	}
