@@ -33,8 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 		GMSPlacesClient.provideAPIKey(googleApiKey)
 		GMSServices.provideAPIKey(googleApiKey)
 		
-		window!.rootViewController = TabBarVC()
-		window!.makeKeyAndVisible()
+		startFirstVC()
 		
         return true
     }
@@ -63,6 +62,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 		let switchAppearance = UISwitch.appearance()
 		switchAppearance.onTintColor = Colors.RED
     }
+	
+	/**
+		Starts the initial view controller with a navigation bar.
+	*/
+	private func startFirstVC()
+	{
+		if (UserData.isFirstRun())
+		{
+			window!.rootViewController = InitialSettingsVC.createWithNavBar()
+		}
+		else
+		{
+			window!.rootViewController = TabBarVC()
+		}
+		window!.makeKeyAndVisible()
+	}
 	
     private func setDelegateForNotifications()
 	{

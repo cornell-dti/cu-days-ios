@@ -25,6 +25,7 @@ class UserData
     //UserDefaults keys
     static let addedPKsName = "AddedPKs" //KeyPath used for accessing added PKs
 	static let versionName = "version" //KeyPath used for accessing local version to compare with database
+	static let launchedBeforeName = "launchedBefore" //KeyPath storing whether app was launched before
 	static let eventsName = "events" //KeyPath where array of events are saved
 	static let categoriesName = "categories" //KeyPath were array of categories are saved
 	static let defaults = UserDefaults.standard
@@ -362,6 +363,17 @@ class UserData
 		{
 			defaults.set(newValue, forKey: versionName)
 		}
+	}
+	/**
+		Returns whether or not this app is running for the first time.
+		No setter is used; this method will only ever return true once. Afterwards, the value is set on disk.
+		- returns: True if the app is running for the first time.
+	*/
+	static func isFirstRun() -> Bool
+	{
+		let launchedBefore = defaults.bool(forKey: launchedBeforeName) //defaults to false
+		defaults.set(true, forKey: launchedBeforeName) //immediately set value
+		return !launchedBefore
 	}
 	/**
 		Save events to disk.

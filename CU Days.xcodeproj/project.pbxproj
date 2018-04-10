@@ -37,6 +37,7 @@
 		06F7FBF6207A72D500FF03BB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD5207A72D400FF03BB /* Constants.swift */; };
 		06F7FBF8207A72D500FF03BB /* DetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBD7207A72D400FF03BB /* DetailsVC.swift */; };
 		06F7FBFF207A761D00FF03BB /* CU-Days.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 06F7FBFD207A761D00FF03BB /* CU-Days.xcdatamodeld */; };
+		06F85BF1207C74CB0021EACC /* InitialSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F85BF0207C74CB0021EACC /* InitialSettingsVC.swift */; };
 		869C2CD508B229A287D6DDDA /* Pods_CU_Days.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */; };
 /* End PBXBuildFile section */
 
@@ -74,6 +75,7 @@
 		06F7FBD5207A72D400FF03BB /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		06F7FBD7207A72D400FF03BB /* DetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsVC.swift; sourceTree = "<group>"; };
 		06F7FBFE207A761D00FF03BB /* CU-Days.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CU-Days.xcdatamodel"; sourceTree = "<group>"; };
+		06F85BF0207C74CB0021EACC /* InitialSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSettingsVC.swift; sourceTree = "<group>"; };
 		5190FB348BE641ED8A337909 /* Pods_CU_Days.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CU_Days.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CA1271BBA3016612043C827 /* Pods-CU Days.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CU Days.release.xcconfig"; path = "Pods/Target Support Files/Pods-CU Days/Pods-CU Days.release.xcconfig"; sourceTree = "<group>"; };
 		E29D83A3DFC59D86259D92E6 /* Pods-CU Days.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CU Days.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CU Days/Pods-CU Days.debug.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				06F7FBBD207A72D100FF03BB /* SearchVC.swift */,
 				06F7FBB9207A72D100FF03BB /* SettingsVC.swift */,
 				06F7FBD0207A72D300FF03BB /* TabBarVC.swift */,
+				06F85BF0207C74CB0021EACC /* InitialSettingsVC.swift */,
 				06F7FBCE207A72D300FF03BB /* UserData.swift */,
 				068CF135207A6D770045C896 /* AppDelegate.swift */,
 				068CF13C207A6D780045C896 /* Assets.xcassets */,
@@ -349,6 +352,7 @@
 				06F7FBEF207A72D500FF03BB /* UserData.swift in Sources */,
 				06F7FBDE207A72D500FF03BB /* SearchVC.swift in Sources */,
 				06F7FBE6207A72D500FF03BB /* Time.swift in Sources */,
+				06F85BF1207C74CB0021EACC /* InitialSettingsVC.swift in Sources */,
 				06F7FBE2207A72D500FF03BB /* FilterVC.swift in Sources */,
 				06F7FBDF207A72D500FF03BB /* DateContainer.swift in Sources */,
 			);
