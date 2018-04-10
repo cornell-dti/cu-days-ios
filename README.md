@@ -3,9 +3,11 @@ CU Days v1.0
 An app for accepted Cornell students and their families to view Cornell Day events. The **Android** branch can be found [here](https://github.com/cornell-dti/cu-days-android).
 Based on the O-Week app [here](https://github.com/cornell-dti/o-week-ios).
 
+<img src="https://raw.githubusercontent.com/cornell-dti/cu-days-ios/master/Screenshots/1.png" width="250px">  <img src="https://raw.githubusercontent.com/cornell-dti/cu-days-ios/master/Screenshots/2.png" width="250px">  <img src="https://raw.githubusercontent.com/cornell-dti/cu-days-ios/master/Screenshots/3.png" width="250px">
+
 Getting Started
 ------
-You will need **Xcode 9.2** to run the latest version of this app, which uses Swift 4 compiled for iOS 11. Xcode can be downloaded from the Mac App Store. Make sure you are not running a beta version of macOS, as Apple will prevent you from publishing to the App Store if you do.
+You will need **Xcode 9.3** to run the latest version of this app, which uses Swift 4 compiled for iOS 11. Xcode can be downloaded from the Mac App Store. Make sure you are not running a beta version of macOS, as Apple will prevent you from publishing to the App Store if you do.
 
 Design Choices
 ------
@@ -36,6 +38,7 @@ Used Libraries
 Unlike Android, which manages its dependencies through Gradle, iOS requires CocoaPods and the editing of the Podfile in the main project directory. If you don't have CocoaPods installed on your computer, follow the instructions [here](https://cocoapods.org/) under the tabs **Install** and **Get Started**.
  * [PureLayout](https://github.com/PureLayout/PureLayout) is a set of extensions added unto UIView to make setting programmatic constraints easy and readable.
  * [PKHUD](https://github.com/pkluz/PKHUD) is an implementation of **Heads Up Displays** in iOS, used like Toasts in Android to provide feedback for user actions.
+ * [Google Maps](https://developers.google.com/maps/documentation/ios-sdk/) and [Google Places](https://developers.google.com/places/ios-api/) is used to display locations based on place id (as opposed to coordinates).
 
 Contributors
 ------
