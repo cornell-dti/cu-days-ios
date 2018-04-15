@@ -1,4 +1,4 @@
-CU Days v1.0
+CU Days v1.1
 ======
 An app for accepted Cornell students and their families to view Cornell Day events. The **Android** branch can be found [here](https://github.com/cornell-dti/cu-days-android).
 Based on the O-Week app [here](https://github.com/cornell-dti/o-week-ios).
