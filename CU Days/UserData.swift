@@ -62,8 +62,6 @@ class UserData
 		dateComponents.month = MONTH
 		dateComponents.day = DAYS[0]
 		
-		selectedDate = UserData.userCalendar.date(from: dateComponents)!
-		
 		//this assumes END_DAY is larger than START_DAY
 		for day in DAYS
 		{
@@ -73,10 +71,18 @@ class UserData
 			selectedEvents[date] = [Int:Event]()
 			allEvents[date] = [Int:Event]()
 			
-			if (UserData.userCalendar.compare(today, to: date, toGranularity: .day) == .orderedSame)
-			{
-				selectedDate = date
+			//select the first day that >= today
+			if (selectedDate == nil) {
+				if (UserData.userCalendar.compare(today, to: date, toGranularity: .day) != .orderedDescending)
+				{
+					selectedDate = date
+				}
 			}
+		}
+		
+		//all days are in the past
+		if (selectedDate == nil) {
+			selectedDate = UserData.userCalendar.date(from: dateComponents)!
 		}
 	}
 	/**
