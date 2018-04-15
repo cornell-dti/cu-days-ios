@@ -109,10 +109,13 @@ class FeedVC:EmptyStateTableVC, DateContainer
 			return
 		}
 		
+		//load table data first
+		tableView.reloadData()
+		
 		for i in 0..<events.count
 		{
 			let event = events[i]
-			if (event.startTime >= now)
+			if (event.startTime < now)
 			{
 				tableView.scrollToRow(at: IndexPath(row: i, section: 0), at: .top, animated: false)
 				return
